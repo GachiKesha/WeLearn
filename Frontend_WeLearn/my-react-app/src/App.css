@@ -1,0 +1,181 @@
+:root {
+  --background-color:  #fff;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: 'Nunito Sans', sans-serif;
+}
+
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.container {
+  padding: 0 15px;
+  min-height: 91vh;
+  justify-content: center;
+  flex-direction: column;
+  background-color: var(--background-color);
+}
+
+.page {
+  justify-content: center ;
+  max-width: 1000px;
+  width: 100%;
+}
+
+h1 {
+  font-size: 40px;
+  background-color: var(--background-color);
+  padding: 0 15px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  padding: 20px;
+  max-width: 500px;
+  width: 100%;
+}
+
+
+.container img{
+  width: 148px;
+  height: 158px;
+}
+
+form input {
+  height: 55px;
+  width: 100%;
+  border: 1px solid #DED2D9;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  font-size: 1rem;
+  padding: 0 14px;
+}
+
+form input:focus {
+  outline: none;
+  background: #ffffff;
+}
+
+::placeholder {
+  color: #E0E0E0;
+  font-size: 15px;
+}
+
+.link {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 15px;
+}
+
+.link .login {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background: #262A7F;
+  padding: 15px 0;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+.link .login:hover {
+  background: #0d65d9;
+}
+
+form a {
+  text-decoration: none;
+}
+
+.link .createAcc {
+  color: #7076FE;
+  font-size: 18px;
+
+}
+
+.link .createAcc:hover {
+  text-decoration: underline;
+}
+
+.forgot-link {
+  color: #262A7F;
+  font-size: 16px;
+  margin-left: 190px;
+  font-weight: 650;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+}
+
+.button {
+  margin-top: 25px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: normal;
+  color: #A1A1A1;
+
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  margin: 3px 0 15px;
+}
+
+.checkmark {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-color: white; 
+  margin-right: 10px;
+  border: 1px solid #000000;
+  border-radius: 3px;
+  text-align: center;
+  line-height: 16px;
+  color: rgb(0, 0, 0);
+}
+
+input[type="checkbox"] {
+  display: none;
+}
+
+input[type="checkbox"]:checked + .checkmark::before {
+  content: '\2713';
+  font-size: 14px;
+  color: rgb(0, 0, 0);
+  display: block;
+  text-align: center;
+  line-height: 16px;
+}
+.support-link {
+  color: #262A7F;
+  text-decoration: none; 
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 15px;
+  font-weight: 650;
+}
+
+.support-link:hover {
+  text-decoration: underline;
+}
