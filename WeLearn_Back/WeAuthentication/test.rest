@@ -1,6 +1,7 @@
 POST http://127.0.0.1:8000/signup Content-Type: application/json
 
-{ "username": "serhii", "password": "qwerty123!", "email": "abc@mail.com" }
+{ "username": "blabla", "password": "qwerty123!", "email": "akak@mail.com" ,
+"known_languages":"Ukrainian","desired_languages":"English" }
 
 ###
 

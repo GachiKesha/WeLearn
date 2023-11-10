@@ -1,14 +1,15 @@
+from django.contrib.auth.models import User
 from django.db import models
 
+class Languages(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+    )
+    known_language = models.CharField(max_length=50)
+    desired_language = models.CharField(max_length=50)
+    id = models.AutoField(primary_key=True, default=1, editable=False)
 
-class CustomUser(models.Model):
-    username = models.CharField(unique=True, max_length=30)
-    email = models.EmailField(unique=True)
-    password = models.CharField(max_length=100)
-    known_languages = models.CharField(max_length=100, blank=True, null=True)
-    desired_language = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
-        return self.username
-
-
+        return str(self.user.username)
