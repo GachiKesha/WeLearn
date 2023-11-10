@@ -11,7 +11,7 @@ function LoginPage() {
     <html lang="en">
       <head>
         <meta charSet="UTF-8" />
-        <title>WeLearn Menu Page</title>
+        <title>WeLearn Login Page</title>
       </head>
       <body>
         <Header />

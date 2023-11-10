@@ -1,0 +1,13 @@
+{
+  "name": "react-webrtc",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "scripts": {
+    "dev": "set NODE_ENV=development && concurrently \"C:\\Users\\Катя\\AppData\\Roaming\\npm\\yarn\" --cwd server dev \"C:\\Users\\Катя\\AppData\\Roaming\\npm\\yarn\" --cwd client dev"
+  }
+}
