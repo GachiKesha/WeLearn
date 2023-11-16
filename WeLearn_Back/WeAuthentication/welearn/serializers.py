@@ -22,3 +22,9 @@ class UserSerializer(serializers.ModelSerializer):
         Languages.objects.create(user=user, **language_data)
 
         return user
+
+
+
+
+
+
