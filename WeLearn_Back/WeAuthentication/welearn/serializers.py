@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Languages
+from .models import User, Languages, Peer
 
 class LanguagesSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,6 +22,22 @@ class UserSerializer(serializers.ModelSerializer):
         Languages.objects.create(user=user, **language_data)
 
         return user
+
+    class PeerSerializer(serializers.ModelSerializer):
+        user = serializers.ReadOnlyField(source='user.id')
+
+        class Meta:
+            model = Peer
+            fields = ['id', 'user', 'desired_lang', 'known_lang', 'name', 'last_time_pinged', 'in_call']
+
+        def create(self, validated_data):
+
+            user_data = validated_data.pop('user')
+            user, created = User.objects.get_or_create(**user_data)
+            peer = Peer.objects.create(user=user, **validated_data)
+
+            return peer
+
 
 
 

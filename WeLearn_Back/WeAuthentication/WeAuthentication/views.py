@@ -5,10 +5,10 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from django.shortcuts import get_object_or_404
-from welearn.models import User
+from welearn.models import User, Peer
 from rest_framework.authtoken.models import Token
 
-from welearn.serializers import UserSerializer
+from welearn.serializers import UserSerializer, PeerSerializer
 
 
 @api_view(['POST'])
@@ -30,7 +30,28 @@ def signup(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(['POST'])
+def peer(request):
+    user = User.objects.create()
+    peer_id = f"user_{user.id}"
 
+    peer_data = {
+        'id': peer_id,
+        'desired_lang': request.data.get('desired_lang'),
+        'known_lang': request.data.get('known_lang'),
+        'name': request.data.get('name'),
+        'last_time_pinged': request.data.get('last_time_pinged'),
+        'in_call': request.data.get('in_call', False),
+    }
+
+    peer_serializer = PeerSerializer(data=peer_data)
+    if peer_serializer.is_valid():
+        peer_serializer.save()
+        return Response(peer_serializer.data, status=status.HTTP_201_CREATED)
+
+
+    user.delete()
+    return Response(peer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
