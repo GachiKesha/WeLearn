@@ -1,15 +1,27 @@
 import {useEffect, useRef, useState} from "react";
 import styles from './VideoCallPage.module.css';
 import Peer from "peerjs";
+import Header from '../common/Header';
+import Support from '../common/Support';
+import settingLogo from './settingLogo.png';
+import camera from './camera.png';
+import next from './next.png';
+import setting1 from './setting1.png';
+import micro from './micro.png';
 
+
+<Header />
 
 function VideoCallPage() {
-    let [peerId, setPeerId] = useState(null);
-    let [targetPeerId, setTargetPeerId] = useState(null);
+    
 
-    const localVideoRef = useRef(null);
-    const remoteVideoRef = useRef(null);
-    const peerRef = useRef(null);
+    let [peerId, setPeerId] = useState('');
+    let [targetPeerId, setTargetPeerId] = useState('');
+
+   const localVideoRef = useRef(null);
+const remoteVideoRef = useRef(null);
+const peerRef = useRef(null);
+
 
 
     const handleIncomingCall = (call) => {
@@ -61,7 +73,12 @@ function VideoCallPage() {
 
 
     return <>
-
+        <Header />
+        <div className='setting'>
+    <a href="#">
+        <img src={settingLogo} alt="Setting Logo" />
+      </a>
+    </div>
         <div className={styles.mainContainer}>
             <div className={styles.videosSection}>
                 <video className={styles.videoElement} ref={localVideoRef} autoPlay playsInline muted />
@@ -81,6 +98,22 @@ function VideoCallPage() {
                 </div>
             </div>
         </div>
+        <div className="center-container">
+        <a href="#">
+        <img src={setting1} alt="Setting1 Logo" />
+      </a>
+      <a href="#">
+        <img src={micro} alt="Micro Logo" />
+      </a>
+      <a href="#">
+        <img src={camera} alt="Camera Logo" />
+      </a>
+      <a href="#">
+        <img src={next} alt="Next Logo" />
+      </a>
+        </div>
+        
+        <Support />
     </>;
 }
 
