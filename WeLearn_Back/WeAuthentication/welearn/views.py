@@ -3,6 +3,7 @@ from rest_framework.authentication import SessionAuthentication, TokenAuthentica
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
+from django.utils import timezone
 
 from django.shortcuts import get_object_or_404
 from welearn.models import User, Peer
@@ -38,6 +39,19 @@ def peer(request):
         return Response(peer_serializer.data, status=status.HTTP_201_CREATED)
 
     return Response(peer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def ping_peer(request, id):
+    try:
+        peer = Peer.objects.get(id=id)
+    except Peer.DoesNotExist:
+        return Response({"detail": "Peer not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    peer.last_time_pinged = timezone.now()
+    peer.save()
+    return Response({"detail": "Peer pinged successfully"}, status=status.HTTP_200_OK)
+
+
 
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
