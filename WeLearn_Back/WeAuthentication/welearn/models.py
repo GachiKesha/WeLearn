@@ -15,11 +15,6 @@ class Languages(models.Model):
         return str(self.user.username)
 
 class Peer(models.Model ):
-    user = models.OneToOneField(
-        User,
-        on_delete=models.PROTECT,
-        related_name="Peer"
-    )
     peer_id = models.CharField(max_length=50)
     desired_lang = models.CharField(max_length=50)
     known_lang = models.CharField(max_length=50)
@@ -28,7 +23,7 @@ class Peer(models.Model ):
     in_call = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.user.username}'s Peer"
+        return f"{self.name}'s Peer"
 
 
     #def __str__(self):

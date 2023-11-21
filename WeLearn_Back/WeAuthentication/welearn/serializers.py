@@ -23,20 +23,14 @@ class UserSerializer(serializers.ModelSerializer):
 
         return user
 
-    class PeerSerializer(serializers.ModelSerializer):
-        user = serializers.ReadOnlyField(source='user.id')
+class PeerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Peer
+        fields = ['id', 'desired_lang', 'known_lang', 'name', 'last_time_pinged', 'in_call']
 
-        class Meta:
-            model = Peer
-            fields = ['id', 'user', 'desired_lang', 'known_lang', 'name', 'last_time_pinged', 'in_call']
+    def create(self, validated_data):
+        return Peer.objects.create(**validated_data)
 
-        def create(self, validated_data):
-
-            user_data = validated_data.pop('user')
-            user, created = User.objects.get_or_create(**user_data)
-            peer = Peer.objects.create(user=user, **validated_data)
-
-            return peer
 
 
 
