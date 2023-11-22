@@ -11,12 +11,11 @@ from rest_framework.authtoken.models import Token
 
 from welearn.serializers import UserSerializer, PeerSerializer
 
-
 @api_view(['POST'])
 def login(request):
     user = get_object_or_404(User, username=request.data['username'])
     if not user.check_password(request.data['password']):
-        return Response({"detail":"Not found."},status=status.HTTP_404_NOT_FOUND)
+        return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
     token, created = Token.objects.get_or_create(user=user)
     serializer = UserSerializer(instance=user)
     return Response({"token": token.key, "user": serializer.data})
@@ -33,12 +32,23 @@ def signup(request):
 
 @api_view(['POST'])
 def peer(request):
-    peer_serializer = PeerSerializer(data=request.data)
-    if peer_serializer.is_valid():
-        peer_serializer.save()
-        return Response(peer_serializer.data, status=status.HTTP_201_CREATED)
+    known_lang = request.data.get('known_lang', None)
+    last_time_pinged = request.data.get('last_time_pinged', None)
+
+    existing_peers = Peer.objects.filter(known_lang=known_lang, last_time_pinged__gte=last_time_pinged)
+
+    if existing_peers.exists():
+        existing_peer_serializers = PeerSerializer(existing_peers, many=True)
+        return Response(existing_peer_serializers.data, status=status.HTTP_200_OK)
+    else:
+        peer_serializer = PeerSerializer(data=request.data)
+        if peer_serializer.is_valid():
+            peer_serializer.save()
+            return Response(peer_serializer.data, status=status.HTTP_201_CREATED)
 
     return Response(peer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 @api_view(['POST'])
 def ping_peer(request, id):
@@ -50,8 +60,6 @@ def ping_peer(request, id):
     peer.last_time_pinged = timezone.now()
     peer.save()
     return Response({"detail": "Peer pinged successfully"}, status=status.HTTP_200_OK)
-
-
 
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
