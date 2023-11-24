@@ -12,7 +12,7 @@ import microOn from './microOn.png';
 import microOff from './microOff.png';
 
 
-<Header />
+
 
 function VideoCallPage() {
     
@@ -20,28 +20,34 @@ function VideoCallPage() {
     const [CameraOff, setCameraOff] = useState(true);
 
     const MicrophoneToggle = () => {
-        setMuteMicrophone((prev) => !prev);
-
-        const localStream = localVideoRef.current.srcObject;
-        const audioTracks = localStream.getAudioTracks();
+        if (localVideoRef.current) {
+          setMuteMicrophone((prev) => !prev);
       
-        audioTracks.forEach((track) => {
-          track.enabled = !MuteMicrophone;  });
+          const localStream = localVideoRef.current.srcObject;
+          const audioTracks = localStream.getAudioTracks();
+      
+          audioTracks.forEach((track) => {
+            track.enabled = !MuteMicrophone;
+          });
+        }
       };
-    
+      
       const CameraToggle = () => {
-        setCameraOff((prev) => !prev);
-        const localStream = localVideoRef.current.srcObject;
-        const videoTracks = localStream.getVideoTracks();
-
-        videoTracks.forEach((track) => {
-            track.enabled = !CameraOff; });
+        if (localVideoRef.current) {
+          setCameraOff((prev) => !prev);
+          const localStream = localVideoRef.current.srcObject;
+          const videoTracks = localStream.getVideoTracks();
+      
+          videoTracks.forEach((track) => {
+            track.enabled = !CameraOff;
+          });
+        }
       };
 
     let [peerId, setPeerId] = useState('');
     let [targetPeerId, setTargetPeerId] = useState('');
 
-   const localVideoRef = useRef(null);
+const localVideoRef = useRef(null);
 const remoteVideoRef = useRef(null);
 const peerRef = useRef(null);
 
@@ -84,19 +90,19 @@ const peerRef = useRef(null);
 
     useEffect(() => {
         initializePeer();
-
+      
         return () => {
-            if (peerRef.current) {
-                peerRef.current.disconnect();
-                remoteVideoRef.current.srcObject = null;
-            }
+          if (peerRef.current) {
+            peerRef.current.disconnect();
+            remoteVideoRef.current.srcObject = null;
+          }
         };
-    }, []); // Run only on component mount and unmount
+      }, []);
 
 
 
     return <>
-        <Header />
+    <Header />
         <div className='setting'>
     <a href="#">
         <img src={settingLogo} alt="Setting Logo" />
@@ -112,6 +118,8 @@ const peerRef = useRef(null);
 
                 <div>
                     <div>Your Peer ID: {peerId}</div>
+                    <div>Language: {}</div>
+                    <div>Name: {}</div>
                     <div>
                         <input value={targetPeerId} onChange={(e) => setTargetPeerId(e.target.value)}/>
                         <button className={styles.startCallBtn} onClick={callPeer}>Call</button>
