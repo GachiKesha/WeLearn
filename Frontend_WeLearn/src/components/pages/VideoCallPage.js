@@ -4,16 +4,39 @@ import Peer from "peerjs";
 import Header from '../common/Header';
 import Support from '../common/Support';
 import settingLogo from './settingLogo.png';
-import camera from './camera.png';
+import cameraOn from './cameraOn.png';
+import cameraOff from './cameraOff.png';
 import next from './next.png';
 import setting1 from './setting1.png';
-import micro from './micro.png';
+import microOn from './microOn.png';
+import microOff from './microOff.png';
 
 
 <Header />
 
 function VideoCallPage() {
     
+    const [MuteMicrophone, setMuteMicrophone] = useState(false);
+    const [CameraOff, setCameraOff] = useState(true);
+
+    const MicrophoneToggle = () => {
+        setMuteMicrophone((prev) => !prev);
+
+        const localStream = localVideoRef.current.srcObject;
+        const audioTracks = localStream.getAudioTracks();
+      
+        audioTracks.forEach((track) => {
+          track.enabled = !MuteMicrophone;  });
+      };
+    
+      const CameraToggle = () => {
+        setCameraOff((prev) => !prev);
+        const localStream = localVideoRef.current.srcObject;
+        const videoTracks = localStream.getVideoTracks();
+
+        videoTracks.forEach((track) => {
+            track.enabled = !CameraOff; });
+      };
 
     let [peerId, setPeerId] = useState('');
     let [targetPeerId, setTargetPeerId] = useState('');
@@ -89,8 +112,6 @@ const peerRef = useRef(null);
 
                 <div>
                     <div>Your Peer ID: {peerId}</div>
-                    <br/>
-                    <br/>
                     <div>
                         <input value={targetPeerId} onChange={(e) => setTargetPeerId(e.target.value)}/>
                         <button className={styles.startCallBtn} onClick={callPeer}>Call</button>
@@ -98,19 +119,27 @@ const peerRef = useRef(null);
                 </div>
             </div>
         </div>
-        <div className="center-container">
-        <a href="#">
-        <img src={setting1} alt="Setting1 Logo" />
-      </a>
-      <a href="#">
-        <img src={micro} alt="Micro Logo" />
-      </a>
-      <a href="#">
-        <img src={camera} alt="Camera Logo" />
-      </a>
-      <a href="#">
-        <img src={next} alt="Next Logo" />
-      </a>
+        <div className={styles.bottomToolbar}>
+            <div className={styles.centerContainer}>
+                <a href="#">
+                    <img src={setting1} alt="Setting1 Logo" />
+                </a>
+                <a href="#" onClick={MicrophoneToggle}>
+                    {MuteMicrophone ? 
+                        (<img src={microOff} alt="Microphone Off" />) 
+                        : (<img src={microOn} alt="Microphone On"/>)
+                    }
+                </a>
+                <a href="#" onClick={CameraToggle}>
+                    {CameraOff ? 
+                        (<img src={cameraOn} alt="Camera On" />) 
+                        : (<img src={cameraOff} alt="Camera Off"/>)
+                    }
+                </a>
+                <a href="#">
+                    <img src={next} alt="Next Logo" />
+                </a>
+            </div>
         </div>
         
         <Support />
