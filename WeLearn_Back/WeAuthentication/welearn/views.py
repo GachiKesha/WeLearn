@@ -39,9 +39,7 @@ def peer(request):
     last_time_pinged = request.data.get('last_time_pinged', None)
 
     existing_peer = Peer.objects.filter(
-        (Q(known_lang=desired_lang, desired_lang=known_lang) | Q(desired_lang=known_lang, known_lang=desired_lang)),
-        last_time_pinged__gte=last_time_pinged
-    ).first()
+        (Q(known_lang=desired_lang, desired_lang=known_lang)),  last_time_pinged__gte=last_time_pinged).first()
 
     if existing_peer:
         existing_peer_serializers = PeerSerializer(existing_peer)
