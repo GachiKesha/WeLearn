@@ -1,0 +1,13 @@
+.h1Container {
+    font-size: 24px;
+  }
+  
+  .h1Container h1 {
+    color: black;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .h1Container h1:hover {
+    color: purple;
+  }

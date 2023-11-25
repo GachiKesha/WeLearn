@@ -75,25 +75,38 @@ const peerRef = useRef(null);
 
     const initializePeer = async () => {
         const localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-
+    
         localVideoRef.current.srcObject = localStream;
-
+    
         peerRef.current = new Peer();
-
+    
         peerRef.current.on('open', (id) => {
-            setPeerId(id);
+          setPeerId(id);
         });
-
+    
         peerRef.current.on('call', handleIncomingCall);
         // Connect to signaling server or perform other setup if needed
-    };
-
-    useEffect(() => {
+      };
+    
+      useEffect(() => {
         initializePeer();
-      
+    
         return () => {
           if (peerRef.current) {
-            peerRef.current.disconnect();
+            peerRef.current.destroy(); // Закриває підключення Peer при виході
+            peerRef.current = null;
+          }
+    
+          if (localVideoRef.current) {
+            const localStream = localVideoRef.current.srcObject;
+            if (localStream) {
+              const tracks = localStream.getTracks();
+              tracks.forEach((track) => track.stop()); // Зупиняє відео- та аудіотреки
+            }
+            localVideoRef.current.srcObject = null;
+          }
+    
+          if (remoteVideoRef.current) {
             remoteVideoRef.current.srcObject = null;
           }
         };

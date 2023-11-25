@@ -1,19 +1,12 @@
-
+import { Link } from 'react-router-dom';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import styles from './Header.css';
 
 const Header = () => {
-  const navigate = useNavigate();
-
-  const handleNavigateToStart = () => {
-    console.log('Navigating to /start');
-    navigate('/start');
-  };
-
   return (
-    <a href="start">
-      <h1>WeLearn</h1>
-    </a>
+    <div> 
+      <h1 className={styles.h1Container}><Link to="/start">WeLearn</Link></h1>
+    </div>
   );
 };
 
