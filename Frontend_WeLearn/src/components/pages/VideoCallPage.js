@@ -16,32 +16,26 @@ import microOff from './microOff.png';
 
 function VideoCallPage() {
     
-    const [MuteMicrophone, setMuteMicrophone] = useState(false);
+    const [MuteMicrophone, setMuteMicrophone] = useState(true);
     const [CameraOff, setCameraOff] = useState(true);
 
     const MicrophoneToggle = () => {
-        if (localVideoRef.current) {
-          setMuteMicrophone((prev) => !prev);
+        setMuteMicrophone((prev) => !prev);
+
+        const localStream = localVideoRef.current.srcObject;
+        const audioTracks = localStream.getAudioTracks();
       
-          const localStream = localVideoRef.current.srcObject;
-          const audioTracks = localStream.getAudioTracks();
-      
-          audioTracks.forEach((track) => {
-            track.enabled = !MuteMicrophone;
-          });
-        }
+        audioTracks.forEach((track) => {
+          track.enabled = !MuteMicrophone;  });
       };
-      
+    
       const CameraToggle = () => {
-        if (localVideoRef.current) {
-          setCameraOff((prev) => !prev);
-          const localStream = localVideoRef.current.srcObject;
-          const videoTracks = localStream.getVideoTracks();
-      
-          videoTracks.forEach((track) => {
-            track.enabled = !CameraOff;
-          });
-        }
+        setCameraOff((prev) => !prev);
+        const localStream = localVideoRef.current.srcObject;
+        const videoTracks = localStream.getVideoTracks();
+
+        videoTracks.forEach((track) => {
+            track.enabled = !CameraOff; });
       };
 
     let [peerId, setPeerId] = useState('');
