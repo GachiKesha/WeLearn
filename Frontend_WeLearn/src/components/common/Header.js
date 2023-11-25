@@ -11,9 +11,9 @@ const Header = () => {
   };
 
   return (
-    <div onClick={handleNavigateToStart}>
+    <a href="start">
       <h1>WeLearn</h1>
-    </div>
+    </a>
   );
 };
 
