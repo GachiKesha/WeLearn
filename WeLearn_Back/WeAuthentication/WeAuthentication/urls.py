@@ -1,9 +1,10 @@
-from django.urls import  re_path
-from . import views
+from django.urls import path
+from welearn.views import login, signup, test_token, peer, ping_peer
 
 urlpatterns = [
-   re_path('login', views.login),
-   re_path('signup', views.signup),
-   re_path('test_token', views.test_token),
+    path('login/', login),
+    path('signup/', signup),
+    path('test_token/', test_token),
+    path('peer/', peer),
+   path('ping_peer/<int:id>/', ping_peer),
 ]
-
