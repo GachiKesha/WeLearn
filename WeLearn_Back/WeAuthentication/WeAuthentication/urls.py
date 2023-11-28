@@ -6,5 +6,8 @@ urlpatterns = [
     path('signup/', signup),
     path('test_token/', test_token),
     path('peer/', peer),
-   path('ping_peer/<int:id>/', ping_peer),
+    path('ping_peer/<int:id>/', ping_peer),
+    path('close_peer/<int:id>/', close_peer),
+    path('delete_peer/<int:id>/', delete_peer),
+    path('peer_info/<int:id>/', peer_info),
 ]
