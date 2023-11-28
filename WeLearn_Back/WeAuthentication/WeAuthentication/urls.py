@@ -1,5 +1,5 @@
 from django.urls import path
-from welearn.views import login, signup, test_token, peer, ping_peer
+from welearn.views import login, signup, test_token, peer, ping_peer, close_peer, delete_peer, peer_info
 
 urlpatterns = [
     path('login/', login),
