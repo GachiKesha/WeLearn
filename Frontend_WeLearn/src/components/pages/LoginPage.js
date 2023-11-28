@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../common/Header';
 import Support from '../common/Support';
@@ -7,6 +7,45 @@ import './login.css';
 import icon from './icon.png';
 
 function LoginPage() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const onSubmit = async () => {
+    try {
+      const response = await fetch('http://localhost:8000/login/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: email,
+          password: password,
+        }),
+      });
+
+      if (!response.ok) {
+        // Handle error, display error message to the user
+        console.error('Login failed');
+        return;
+      }
+
+      const data = await response.json();
+      // Handle successful login, store token or user data in your app
+
+      console.log('Login successful', data);
+    } catch (error) {
+      console.error('Error during login:', error);
+    }
+  };
+
   return (
     <html lang="en">
       <head>
@@ -50,7 +89,5 @@ function LoginPage() {
     </html>
   );
 }
-function onSubmit(){
-  console.log ("abc")
-}
+
 export default LoginPage;
