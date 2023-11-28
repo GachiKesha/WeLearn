@@ -13,6 +13,7 @@ from welearn.serializers import UserSerializer, PeerSerializer
 
 from django.db.models import Q
 
+
 @api_view(['POST'])
 def login(request):
     user = get_object_or_404(User, username=request.data['username'])
@@ -21,6 +22,7 @@ def login(request):
     token, created = Token.objects.get_or_create(user=user)
     serializer = UserSerializer(instance=user)
     return Response({"token": token.key, "user": serializer.data})
+
 
 @api_view(['POST'])
 def signup(request):
@@ -39,7 +41,10 @@ def peer(request):
     last_time_pinged = request.data.get('last_time_pinged', None)
 
     existing_peer = Peer.objects.filter(
-        (Q(known_lang=desired_lang, desired_lang=known_lang)),  last_time_pinged__gte=last_time_pinged).first()
+        (Q(known_lang=desired_lang,
+           desired_lang=known_lang)),
+        last_time_pinged__gte=last_time_pinged,
+        in_call=False).first()
 
     if existing_peer:
         existing_peer_serializers = PeerSerializer(existing_peer)
@@ -55,9 +60,6 @@ def peer(request):
     return Response(peer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-
-
 @api_view(['POST'])
 def ping_peer(request, id):
     try:
@@ -68,6 +70,45 @@ def ping_peer(request, id):
     peer.last_time_pinged = timezone.now()
     peer.save()
     return Response({"detail": "Peer pinged successfully"}, status=status.HTTP_200_OK)
+
+
+# Next call
+@api_view(['POST'])
+def close_peer(request, id):
+    try:
+        peer = Peer.objects.get(id=id)
+    except Peer.DoesNotExist:
+        return Response({"detail": "Peer not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    peer.in_call = False
+    peer.last_time_pinged = timezone.now()
+    peer.save()
+    return Response({"detail": "Peer closed successfully"}, status=status.HTTP_200_OK)
+
+
+# Exit call
+@api_view(['DELETE'])
+def delete_peer(request, id):
+    try:
+        peer = Peer.objects.get(id=id)
+    except Peer.DoesNotExist:
+        return Response({"detail": "Peer not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    peer.delete()
+    return Response({"detail": "Peer deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+
+
+# debug purposes
+@api_view(['GET'])
+def peer_info(request, id):
+    try:
+        peer = Peer.objects.get(id=id)
+    except Peer.DoesNotExist:
+        return Response({"detail": "Peer not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    peer_serializer = PeerSerializer(peer)
+    return Response(peer_serializer.data, status=status.HTTP_200_OK)
+
 
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
