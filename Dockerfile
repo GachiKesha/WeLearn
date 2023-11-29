@@ -1,23 +1,8 @@
-# Use an official Node runtime as a parent image
-FROM node:14
-
-# Set the working directory in the container
+FROM node:14.17
 WORKDIR /workspace/Frontend_WeLearn
-
-# Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
+RUN npm install
+WORKDIR /workspace/WeLearn_Back
+COPY WeLearn_Back/requirements.txt ./
+RUN pip install -r requirements.txt
 
-# Install dependencies
-RUN yarn install
-
-# Bundle app source
-COPY . .
-
-# Expose port 3000
-EXPOSE 3000
-
-# Define environment variable
-ENV NODE_ENV=development
-
-# Run the application
-CMD ["yarn", "start"]
