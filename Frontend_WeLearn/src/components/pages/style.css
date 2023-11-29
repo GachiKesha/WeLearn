@@ -1,56 +1,86 @@
 :root {
-    --background-color:  #fff;
-  }
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  
-  }
-  
-  html {
-    scroll-behavior: smooth;
-    font-family: 'Nunito Sans', sans-serif;
-  }
-  .page {
-    justify-content: center ;
-    max-width: 1000px;
-    width: 100%;
-  }
-  
-  h1 {
-    font-size: 40px;
-    background-color: var(--background-color);
-    padding: 0 15px;
-  }
-  
-  .flex {
-    display: flex;
-    align-items: center;
-  }
-  
-  /* style.css */
+  --background-color:  #fff;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 
-.setting-container {
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: 'Nunito Sans', sans-serif;
+}
+.page {
+  justify-content: center ;
+  max-width: 1000px;
+  width: 100%;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+label {
+  font-weight: normal;
+  color: #A1A1A1;
+
+}
+
+::placeholder {
+  color: #E0E0E0;
+  font-size: 15px;
+}
+
+a{
+  text-decoration: none;
+}
+
+.setting {
   position: fixed;
   top: 20px;
   right: 20px;
 }
 
-.setting-container a {
+.setting a {
   display: block;
 }
 
-.setting-container img {
-  width: 40px; /* Adjust the width as needed */
-  height: 40px; /* Adjust the height as needed */
+.setting img {
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.5s linear;
+  transition-timing-function: cubic-bezier(0.5, 0, 0.25, 1);
 }
 
-.setting-container img:hover {
-  transform: rotate(360deg);
+.setting img:hover {
+  transform: rotate(170deg);
 }
 
-  
-  
+.support-link .support {
+  color: #7076FE;
+  font-weight: 700;
+  text-decoration: none; 
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  padding: 10px 10px;
+}
+
+.support-link .support:hover{
+  text-decoration: underline;
+  color: #7076FE;
+  font-weight: 700;
+}
+
+.button {
+  margin-top: 25px;
+  text-align: center;
+  margin-bottom: 20px;
+  width: 200px;
+}
+
+
