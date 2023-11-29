@@ -1,22 +1,8 @@
 {
-  "name": "DjangoReact",
-  "dockerFile": "Dockerfile",
+  "name": "My Codespace",
+  "dockerComposeFile": ["docker-compose.yml"],
+  "service": ["frontend", "backend"],
   "settings": {
     "terminal.integrated.shell.linux": "/bin/bash"
-  },
-  "extensions": [],
-  "forwardPorts": [8000],
-  "postCreateCommand": "yarn install && yarn start",
-  "remoteUser": "vscode",
-  "workspaceMount": "source=${localWorkspaceFolder}/WeLearn_Back,target=/workspace/WeLearn_Back,type=bind,consistency=cached",
-  "workspaceFolder": "/workspace/Frontend_WeLearn",
-  "shutdownAction": "stopCompose",
-  "services": [
-    {
-      "name": "backend",
-      "service": "backend",
-      "runOptions": ["-p", "8000:8000"],
-      "workspaceFolder": "/workspace/WeLearn_Back"
-    }
-  ]
+  }
 }
