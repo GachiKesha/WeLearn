@@ -22,8 +22,8 @@ def login(request):
     token, created = Token.objects.get_or_create(user=user)
     serializer = UserSerializer(instance=user)
     return Response({"token": token.key, "user": serializer.data})
-
-
+  
+  
 @api_view(['POST'])
 def signup(request):
     serializer = UserSerializer(data=request.data)
@@ -56,7 +56,7 @@ def peer(request):
         if peer_serializer.is_valid():
             peer_serializer.save()
             return Response(peer_serializer.data, status=status.HTTP_201_CREATED)
-
+          
     return Response(peer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -66,7 +66,7 @@ def ping_peer(request, id):
         peer = Peer.objects.get(id=id)
     except Peer.DoesNotExist:
         return Response({"detail": "Peer not found"}, status=status.HTTP_404_NOT_FOUND)
-
+      
     peer.last_time_pinged = timezone.now()
     peer.save()
     return Response({"detail": "Peer pinged successfully"}, status=status.HTTP_200_OK)
@@ -79,7 +79,7 @@ def close_peer(request, id):
         peer = Peer.objects.get(id=id)
     except Peer.DoesNotExist:
         return Response({"detail": "Peer not found"}, status=status.HTTP_404_NOT_FOUND)
-
+      
     peer.in_call = False
     peer.last_time_pinged = timezone.now()
     peer.save()
@@ -108,6 +108,9 @@ def peer_info(request, id):
 
     peer_serializer = PeerSerializer(peer)
     return Response(peer_serializer.data, status=status.HTTP_200_OK)
+    peer.last_time_pinged = timezone.now()
+    peer.save()
+    return Response({"detail": "Peer pinged successfully"}, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
