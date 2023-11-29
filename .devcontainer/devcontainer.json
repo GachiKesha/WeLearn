@@ -1,7 +1,0 @@
-{
-  "name": "My Codespace",
-  "dockerComposeFile": ["docker-compose.yml"],
-  "settings": {
-    "terminal.integrated.shell.linux": "/bin/bash"
-  }
-}
