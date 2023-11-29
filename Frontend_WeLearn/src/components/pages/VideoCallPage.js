@@ -16,26 +16,32 @@ import microOff from './microOff.png';
 
 function VideoCallPage() {
     
-    const [MuteMicrophone, setMuteMicrophone] = useState(true);
+    const [MuteMicrophone, setMuteMicrophone] = useState(false);
     const [CameraOff, setCameraOff] = useState(true);
 
     const MicrophoneToggle = () => {
-        setMuteMicrophone((prev) => !prev);
-
-        const localStream = localVideoRef.current.srcObject;
-        const audioTracks = localStream.getAudioTracks();
+        if (localVideoRef.current) {
+          setMuteMicrophone((prev) => !prev);
       
-        audioTracks.forEach((track) => {
-          track.enabled = !MuteMicrophone;  });
+          const localStream = localVideoRef.current.srcObject;
+          const audioTracks = localStream.getAudioTracks();
+      
+          audioTracks.forEach((track) => {
+            track.enabled = !MuteMicrophone;
+          });
+        }
       };
-    
+      
       const CameraToggle = () => {
-        setCameraOff((prev) => !prev);
-        const localStream = localVideoRef.current.srcObject;
-        const videoTracks = localStream.getVideoTracks();
-
-        videoTracks.forEach((track) => {
-            track.enabled = !CameraOff; });
+        if (localVideoRef.current) {
+          setCameraOff((prev) => !prev);
+          const localStream = localVideoRef.current.srcObject;
+          const videoTracks = localStream.getVideoTracks();
+      
+          videoTracks.forEach((track) => {
+            track.enabled = !CameraOff;
+          });
+        }
       };
 
     let [peerId, setPeerId] = useState('');
@@ -69,25 +75,38 @@ const peerRef = useRef(null);
 
     const initializePeer = async () => {
         const localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-
+    
         localVideoRef.current.srcObject = localStream;
-
+    
         peerRef.current = new Peer();
-
+    
         peerRef.current.on('open', (id) => {
-            setPeerId(id);
+          setPeerId(id);
         });
-
+    
         peerRef.current.on('call', handleIncomingCall);
         // Connect to signaling server or perform other setup if needed
-    };
-
-    useEffect(() => {
+      };
+    
+      useEffect(() => {
         initializePeer();
-      
+    
         return () => {
           if (peerRef.current) {
-            peerRef.current.disconnect();
+            peerRef.current.destroy(); // Закриває підключення Peer при виході
+            peerRef.current = null;
+          }
+    
+          if (localVideoRef.current) {
+            const localStream = localVideoRef.current.srcObject;
+            if (localStream) {
+              const tracks = localStream.getTracks();
+              tracks.forEach((track) => track.stop()); // Зупиняє відео- та аудіотреки
+            }
+            localVideoRef.current.srcObject = null;
+          }
+    
+          if (remoteVideoRef.current) {
             remoteVideoRef.current.srcObject = null;
           }
         };
@@ -124,7 +143,7 @@ const peerRef = useRef(null);
         <div className={styles.bottomToolbar}>
             <div className={styles.centerContainer}>
                 <a href="#">
-                    <img src={setting1} alt="Setting1 Logo" />
+                    <img src={setting1} alt="Setting1 Logo"/>
                 </a>
                 <a href="#" onClick={MicrophoneToggle}>
                     {MuteMicrophone ? 
