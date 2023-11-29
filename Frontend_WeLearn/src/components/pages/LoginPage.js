@@ -20,7 +20,7 @@ function LoginPage() {
 
   const onSubmit = async () => {
     try {
-      const response = await fetch('http://localhost:8000/login/', {
+      const response = await fetch('http://127.0.0.1:8000/login/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -58,29 +58,43 @@ function LoginPage() {
           <img src={icon} alt="Icon" />
           <div className="page flex">
             <div className="post">
-            <label htmlFor="email">Email</label>
-              <input type="email" placeholder="mail@abc.com" required />
-              <label htmlFor="password">Password</label>
-              <input type="password" placeholder="*****************" required />
-              <label className="checkbox-container">
-                Remember Me
-                <input type="checkbox" id="remember" name="remember" />
-                <div className="checkmark"></div>
-                <a href="##" className="forgot-link">
-                  Forgot Password?
-                </a>
-              </label>
-              <div className="link">
-                <button type="submit" onClick={onSubmit} className="login">
-                  Login
-                </button>
-                <p>
-                  Not Registered Yet?{' '}
-                  <Link to="/registration" className="createAcc">
-                    Create account
-                  </Link>
-                </p>
-              </div>
+              <form onSubmit={onSubmit}>
+                <label htmlFor="email">Email</label>
+                <input
+                  type="email"
+                  placeholder="mail@abc.com"
+                  required
+                  value={email}
+                  onChange={handleEmailChange}
+                />
+                <label htmlFor="password">Password</label>
+                <input
+                  type="password"
+                  placeholder="*****************"
+                  required
+                  value={password}
+                  onChange={handlePasswordChange}
+                />
+                <label className="checkbox-container">
+                  Remember Me
+                  <input type="checkbox" id="remember" name="remember" />
+                  <div className="checkmark"></div>
+                  <a href="##" className="forgot-link">
+                    Forgot Password?
+                  </a>
+                </label>
+                <div className="link">
+                  <button type="submit" className="login">
+                    Login
+                  </button>
+                  <p>
+                    Not Registered Yet?{' '}
+                    <Link to="/registration" className="createAcc">
+                      Create account
+                    </Link>
+                  </p>
+                </div>
+              </form>
             </div>
           </div>
         </div>
