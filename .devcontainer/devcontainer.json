@@ -1,7 +1,7 @@
 {
   "name": "My Codespace",
   "dockerComposeFile": ["docker-compose.yml"],
-  "service": ["frontend", "backend"],
+  "service": "frontend  backend",
   "settings": {
     "terminal.integrated.shell.linux": "/bin/bash"
   }
