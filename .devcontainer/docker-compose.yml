@@ -2,11 +2,11 @@ version: '3'
 services:
   frontend:
     build:
-      context: ./Frontend_WeLearn
+      context: /workspace/Frontend_WeLearn
     ports:
       - "3000:3000"
   backend:
     build:
-      context: ./WeLearn_Back
+      context: /workspace/WeLearn_Back
     ports:
       - "8000:8000"
