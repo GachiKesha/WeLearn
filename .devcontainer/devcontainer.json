@@ -8,7 +8,7 @@
   "forwardPorts": [8000],
   "postCreateCommand": "yarn install && yarn start",
   "remoteUser": "vscode",
-  "workspaceMount": "source=${localWorkspaceFolder}/backend,target=/workspace/backend,type=bind,consistency=cached",
+  "workspaceMount": "source=${localWorkspaceFolder}/WeLearn_Back,target=/workspace/WeLearn_Back,type=bind,consistency=cached",
   "workspaceFolder": "/workspace/Frontend_WeLearn",
   "shutdownAction": "stopCompose",
   "services": [
