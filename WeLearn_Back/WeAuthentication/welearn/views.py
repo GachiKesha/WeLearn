@@ -28,6 +28,10 @@ def login(request):
 def signup(request):
     serializer = UserSerializer(data=request.data)
     if serializer.is_valid():
+        existing_user = User.objects.filter(email=request.data['email']).first()
+        if existing_user:
+            return Response({"error": "User with this email already exists"}, status=status.HTTP_400_BAD_REQUEST)
+
         user = serializer.save()
         token = Token.objects.create(user=user)
         return Response({"token": token.key, "user": serializer.data})
