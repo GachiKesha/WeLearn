@@ -1,7 +1,7 @@
 function Support(){
     return (
         <div className="support-link">
-             <a href="##" className="support">Support</a>
+             <a href="https://www.softserveinc.com/uk-ua" className="support">Support</a>
         </div>
     )
 }
