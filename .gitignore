@@ -1,2 +1,44 @@
-.idea
-venv
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Secret key
+*.secret
+
+# Virtual environment
+venv/
+env/
+
+# Development-related
+*.sqlite3
+*.db
+*.log
+
+# IDE files
+.idea/
+
+# Compiled Python files
+*.pyc
+
+# Local development settings
+local_settings.py
+
+# Pipenv environment
+Pipfile.lock
+Pipfile
+
+# Mac OS
+.DS_Store
+
+# PyCharm settings
+*.iml
+.idea/
+
+# Visual Studio Code settings
+.vscode/
+
+# Logs
+logs/
+*.log
