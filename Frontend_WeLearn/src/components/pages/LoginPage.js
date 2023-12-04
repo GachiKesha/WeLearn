@@ -43,8 +43,13 @@ function LoginPage() {
   };
 
   return (
-    <div>
-        
+    <html lang="en">
+      <head>
+        <meta charSet="UTF-8" />
+        <title>WeLearn Login Page</title>
+      </head>
+      <body>
+        <Header />
         <div className="container1 flex">
           <img src={icon} alt="Icon" />
           <div className="page flex">
@@ -90,8 +95,8 @@ function LoginPage() {
           </div>
         </div>
         <Support />
-    
-  </div>
+      </body>
+    </html>
   );
 }
 
