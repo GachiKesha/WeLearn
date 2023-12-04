@@ -17,7 +17,7 @@ env/
 *.log
 
 # IDE files
-../.idea/
+.idea/
 
 # Compiled Python files
 *.pyc
