@@ -34,7 +34,7 @@ Pipfile
 
 # PyCharm settings
 *.iml
-.idea/
+../.idea/
 
 # Visual Studio Code settings
 .vscode/
