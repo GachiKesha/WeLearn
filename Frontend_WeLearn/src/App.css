@@ -145,13 +145,13 @@ label {
   display: inline-block;
   width: 16px;
   height: 16px;
-  background-color: #262A7F; 
+  background-color: white; 
   margin-right: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #000000;
   border-radius: 3px;
   text-align: center;
   line-height: 16px;
-  color: white;
+  color: rgb(0, 0, 0);
 }
 
 input[type="checkbox"] {
@@ -161,18 +161,19 @@ input[type="checkbox"] {
 input[type="checkbox"]:checked + .checkmark::before {
   content: '\2713';
   font-size: 14px;
-  color: white;
+  color: rgb(0, 0, 0);
   display: block;
   text-align: center;
   line-height: 16px;
 }
 .support-link {
   color: #262A7F;
-  text-decoration: underline; 
+  text-decoration: none; 
   position: absolute;
   bottom: 0;
   right: 0;
   margin: 15px;
+  font-weight: 650;
 }
 
 .support-link:hover {
