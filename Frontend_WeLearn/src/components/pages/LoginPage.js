@@ -47,24 +47,11 @@ function LoginPage() {
   };
 
   return (
-<<<<<<< HEAD
     <div>
-        
         <div className="container1 flex">
-=======
-    <html lang="en">
-      <head>
-        <meta charSet="UTF-8" />
-        <title>WeLearn Login Page</title>
-      </head>
-      <body>
-        <Header />
-        <div className="container flex">
->>>>>>> parent of c6650d5b (Update LoginPage.js)
           <img src={icon} alt="Icon" />
           <div className="page flex">
             <div className="post">
-              <form onSubmit={onSubmit}>
                 <label htmlFor="email">Email</label>
                 <input
                   type="email"
@@ -90,7 +77,7 @@ function LoginPage() {
                   </a>
                 </label>
                 <div className="link">
-                  <button type="submit" className="login">
+                  <button type="submit" onSubmit={onSubmit} className="login">
                     Login
                   </button>
                   <p>
@@ -100,13 +87,11 @@ function LoginPage() {
                     </Link>
                   </p>
                 </div>
-              </form>
             </div>
           </div>
         </div>
         <Support />
-    
-  </div>
+    </div>
   );
 }
 
