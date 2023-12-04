@@ -114,7 +114,7 @@ const peerRef = useRef(null);
 
 
 
-    return <>
+    return <div>
     <Header />
         <div className='setting'>
     <a href="#">
@@ -164,7 +164,7 @@ const peerRef = useRef(null);
         </div>
         
         <Support />
-    </>;
+    </div>;
 }
 
 

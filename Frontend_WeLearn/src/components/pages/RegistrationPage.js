@@ -121,12 +121,7 @@ function RegistrationPage() {
   };
   
   return (
-    <html lang="en">
-      <head>
-        <meta charSet="UTF-8" />
-        <title>WeLearn Registration Page</title>
-      </head>
-      <body>
+   <div>
         <Header /> 
         <div className="container2 flex">
           <img src={icon} alt="Icon" />
@@ -170,8 +165,7 @@ function RegistrationPage() {
           </div>
         </div>
         <Support/>
-      </body>
-    </html>
+   </div>
   );
 }
 

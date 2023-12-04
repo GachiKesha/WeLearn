@@ -38,7 +38,7 @@ function StartPage() {
   };
 
   return (
-    <>
+    <div>
       <Header />
       <div className='setting'>
         <a href="#">
@@ -73,7 +73,7 @@ function StartPage() {
         </div>
       </div>
       <Support />
-    </>
+    </div>
   );
 }
 
