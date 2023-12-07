@@ -1,0 +1,14 @@
+POST http://127.0.0.1:8000/signup Content-Type: application/json
+
+{ "username": "blabla", "password": "qwerty123!", "email": "akak@mail.com" ,
+"known_languages":"Ukrainian","desired_languages":"English" }
+
+###
+
+POST http://127.0.0.1:8000/login Content-Type: application/json
+
+{ "username": "serhii", "password": "qwertу123!" }
+
+###
+
+GET http://127.0.0.1:8000/test_token Content-Type: application/json Authorization: token xxx
