@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from '../common/Header'; 
 import Support from '../common/Support';
 import './style.css'; 
@@ -6,6 +7,7 @@ import './registr.css';
 import icon from './icon.png'; 
 
 function RegistrationPage() {
+  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
@@ -135,6 +137,9 @@ function RegistrationPage() {
           const data = await response.json();
           console.log('Registration successful!', data);
           // Додайте код для обробки успішної реєстрації.
+          
+          // Використайте navigate для переходу на іншу сторінку після успішної реєстрації.
+          navigate('/menu'); // Змініть '/success-page' на ваш маршрут
         } else {
           const errorData = await response.json();
           console.error('Registration failed. Please check the form for errors.', errorData);
