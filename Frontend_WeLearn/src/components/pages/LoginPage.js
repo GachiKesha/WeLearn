@@ -52,22 +52,25 @@ function LoginPage() {
           password: password,
         }),
       });
-
-      if (!response.ok) {
+  
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Login successful!', data);
+        // Handle successful login, store token or user data in your app
+        // Add code for handling successful login
+      } else {
+        const errorData = await response.json();
+        console.error('Login failed. Please check your credentials.', errorData);
         // Handle error, display error message to the user
-        console.error('Login failed');
-        return;
+        // Add code for handling login errors
       }
-
-      const data = await response.json();
-      // Handle successful login, store token or user data in your app
-
-      console.log('Login successful', data);
     } catch (error) {
       console.error('Error during login:', error);
+      // Handle other errors
+      // Add code for handling other errors
     }
   };
-
+  
   return (
 
     <div>
