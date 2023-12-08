@@ -1,44 +1,90 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import Peer from 'peerjs';
 import Header from '../common/Header';
 import Support from '../common/Support';
 import './style.css';
 import './menu.css';
-import settingsLogo from './settingLogo.png';
+import settingLogo from './settingLogo.png';
 import userIcon from './userIcon.png';
-import startLogo from './startLogo.png';
+import { useNavigate } from 'react-router-dom';
 
 function MenuPage() {
-  return (
-    
-    <div>
-    
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
-<link
-  href="https://fonts.googleapis.com/css2?family=Lora&family=Nunito+Sans:ital,opsz,wght@0,6..12,200;0,6..12,300;0,6..12,800;1,6..12,1000&display=swap"
-  rel="stylesheet"
-/>
+  const navigate = useNavigate();
+  const localVideoRef = useRef();
+  const peerRef = useRef();
+  const [peerId, setPeerId] = useState(null);
 
-    
-        <Header />
-        <div className="container flex">
-          <div className="user-info">
-            <img src={userIcon} alt="User Icon" />
-            <div className="user-name">
-              <p>User name</p>
-            </div>
-            <a href="##">
-              <img src={settingsLogo} alt="Settings" />
-            </a>
+  const onStart = () => {
+    console.log('Start button clicked');
+    // redirect to /videocallPage
+    navigate('/videocall');
+  };
+
+  const initializePeer = async () => {
+    try {
+      const localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+
+      if (localVideoRef.current) {
+        localVideoRef.current.srcObject = localStream;
+      }
+
+      peerRef.current = new Peer();
+
+      peerRef.current.on('open', (id) => {
+        setPeerId(id);
+      });
+
+      peerRef.current.on('call', handleIncomingCall);
+      // Connect to signaling server or perform other setup if needed
+    } catch (error) {
+      console.error('Error accessing media devices:', error);
+    }
+  };
+
+  useEffect(() => {
+    initializePeer();
+
+    return () => {
+      // Additional cleanup or resource release if needed
+    };
+  }, []);
+
+  const handleIncomingCall = (call) => {
+    // Handle incoming call if needed
+  };
+
+  return (
+    <div>
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Lora&family=Nunito+Sans:ital,opsz,wght@0,6..12,200;0,6..12,300;0,6..12,800;1,6..12,1000&display=swap"
+        rel="stylesheet"/>
+  
+      <Header />
+      <div className='setting'>
+        <a href="#">
+          <img src={settingLogo} alt="Setting Logo" />
+        </a>
+      </div>
+      <div className="box flex">
+        <div className="user-info">
+          <img className="user-icon" src={userIcon} alt="User Icon" />
+          <div className="user-name">
+            <p>User name</p>
           </div>
-          <div className="post">
-            <div className="video-start">
-              <a href="##">
-                <img src={startLogo} alt="Start" />
-              </a>
-            </div>
-          </div>
+        
         </div>
-        <Support />
+      </div>
+
+      <div className="link">
+        <button type="button" className="start" onClick={onStart}>
+          ▶
+        </button>
+      </div>
+
+      <video ref={localVideoRef} autoPlay playsInline muted className="videoElement" />
+
+      <Support />
     </div>
   );
 }
