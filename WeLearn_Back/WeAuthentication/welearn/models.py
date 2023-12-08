@@ -25,7 +25,4 @@ class Peer(models.Model ):
         return f"{self.name}'s Peer"
 
 
-    #def __str__(self):
-    #return f"{self.user.username} - Last Pinged: {self.last_time_pinged}, In Call: {self.in_call}"
-
 
