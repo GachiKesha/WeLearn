@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from '../common/Header'; 
 import Support from '../common/Support';
 import './style.css'; 
@@ -6,6 +7,7 @@ import './registr.css';
 import icon from './icon.png'; 
 
 function RegistrationPage() {
+  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
@@ -112,11 +114,41 @@ function RegistrationPage() {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (validateForm()) {
-      console.log('Registration successful!');
-    } else {
-      console.log('Registration failed. Please check the form for errors.');
+      try {
+        const response = await fetch('http://127.0.0.1:8000/signup/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username: name,
+            password: password,
+            email: email,
+            languages: {
+              known_language: mainLanguage,
+              desired_language: desiredLanguage}
+          }),
+          
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Registration successful!', data);
+          // Додайте код для обробки успішної реєстрації.
+          
+          // Використайте navigate для переходу на іншу сторінку після успішної реєстрації.
+          navigate('/menu'); // Змініть '/success-page' на ваш маршрут
+        } else {
+          const errorData = await response.json();
+          console.error('Registration failed. Please check the form for errors.', errorData);
+          // Додайте код для обробки помилок під час реєстрації.
+        }
+      } catch (error) {
+        console.error('An error occurred while processing the registration.', error);
+        // Додайте код для обробки інших помилок.
+      }
     }
   };
   
