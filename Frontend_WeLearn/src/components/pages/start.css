@@ -1,9 +1,12 @@
 .container {
+  display: flex;
+  align-items: center;
   padding: 0 15px;
   min-height: 500px;
   justify-content: center;
   flex-direction: column;
   background-color: var(--background-color);
+  
 }
 
 .post {
@@ -13,6 +16,7 @@
   padding: 211px 70px;
   max-width: 500px;
   width: 100%;
+  
 }
 
 .container img {
