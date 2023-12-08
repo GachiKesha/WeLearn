@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link} from 'react-router-dom'; // Додаємо useHistory
 import Header from '../common/Header';
 import Support from '../common/Support';
 import './style.css';
@@ -8,6 +8,7 @@ import icon from './icon.png';
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 function LoginPage() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -17,10 +18,10 @@ function LoginPage() {
     let isValid = true;
 
     if (!email) {
-      setEmailError('Please enter your email.');
+      setEmailError('Будь ласка, введіть свій email.');
       isValid = false;
     } else if (!emailPattern.test(email)) {
-      setEmailError('Please enter a valid email address.');
+      setEmailError('Будь ласка, введіть дійсну email-адресу.');
       isValid = false;
     } else {
       setEmailError('');
@@ -36,40 +37,47 @@ function LoginPage() {
   };
 
   const onSubmit = async () => {
-    const isValid = validateFields();
-    if (!isValid) {
-      // If form validation fails, don't proceed with the API call
-      return;
+  const isValid = validateFields();
+  if (!isValid) {
+    // Якщо перевірка форми не пройшла, не продовжуємо виклик API
+    return;
+  }
+
+  try {
+    const response = await fetch('http://127.0.0.1:8000/login/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: email,
+        password: password,
+      }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log('Вхід успішний!', data);
+
+      // Обробка успішного входу, збереження токену чи даних користувача в вашому додатку
+      // Додайте код для обробки успішного входу
+
+      console.log('Navigating to /menu');
+      navigate('/menu');
+    } else {
+      const errorData = await response.json();
+      console.error('Вхід не вдалий. Перевірте свої облікові дані.', errorData);
+
+      // Обробка помилки, відображення повідомлення про помилку користувачеві
+      // Додайте код для обробки помилок входу
     }
-    try {
-      const response = await fetch('http://127.0.0.1:8000/login/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: email,
-          password: password,
-        }),
-      });
-  
-      if (response.ok) {
-        const data = await response.json();
-        console.log('Login successful!', data);
-        // Handle successful login, store token or user data in your app
-        // Add code for handling successful login
-      } else {
-        const errorData = await response.json();
-        console.error('Login failed. Please check your credentials.', errorData);
-        // Handle error, display error message to the user
-        // Add code for handling login errors
-      }
-    } catch (error) {
-      console.error('Error during login:', error);
-      // Handle other errors
-      // Add code for handling other errors
-    }
-  };
+  } catch (error) {
+    console.error('Помилка під час входу:', error);
+
+    // Обробка інших помилок
+    // Додайте код для обробки інших помилок
+  }
+};
   
   return (
 

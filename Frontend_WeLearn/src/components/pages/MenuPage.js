@@ -12,10 +12,12 @@ function MenuPage() {
     
     <div>
     
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Lora&family=Nunito+Sans:ital,opsz,wght@0,6..12,200;0,6..12,300;0,6..12,800;1,6..12,1000&display=swap"
-          rel="stylesheet"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
+<link
+  href="https://fonts.googleapis.com/css2?family=Lora&family=Nunito+Sans:ital,opsz,wght@0,6..12,200;0,6..12,300;0,6..12,800;1,6..12,1000&display=swap"
+  rel="stylesheet"
+/>
+
     
         <Header />
         <div className="container flex">
