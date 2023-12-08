@@ -6,6 +6,7 @@ import './style.css';
 import './login.css';
 import icon from './icon.png';
 
+
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function LoginPage() {
