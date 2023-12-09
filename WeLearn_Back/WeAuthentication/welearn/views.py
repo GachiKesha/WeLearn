@@ -1,3 +1,5 @@
+from datetime import timedelta, datetime
+
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -11,7 +13,7 @@ from rest_framework.authtoken.models import Token
 
 from welearn.serializers import UserSerializer, PeerSerializer
 
-from django.db.models import Q
+
 
 
 @api_view(['POST'])
@@ -51,15 +53,13 @@ def get_user(request, id):
 
 
 @api_view(['POST'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def peer(request):
-    known_lang = request.data.get('known_lang', None)
-    desired_lang = request.data.get('desired_lang', None)
-    last_time_pinged = request.data.get('last_time_pinged', None)
-
     existing_peer = Peer.objects.filter(
-        (Q(known_lang=desired_lang,
-           desired_lang=known_lang)),
-        last_time_pinged__gte=last_time_pinged,
+        known_lang=request.user.languages.desired_language,
+        desired_lang=request.user.languages.known_language,
+        last_time_pinged__gte=datetime.now() - timedelta(minutes=1),
         in_call=False).first()
 
     if existing_peer:
@@ -70,10 +70,12 @@ def peer(request):
     else:
         peer_serializer = PeerSerializer(data=request.data)
         if peer_serializer.is_valid():
-            peer_serializer.save()
+            peer_serializer.last_time_pinged = timezone.now()
+            peer_serializer.in_call = False
+            peer_serializer.save(user=request.user)
             return Response(peer_serializer.data, status=status.HTTP_201_CREATED)
-          
-    return Response(peer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(peer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
@@ -86,21 +88,6 @@ def ping_peer(request, id):
     peer.last_time_pinged = timezone.now()
     peer.save()
     return Response({"detail": "Peer pinged successfully"}, status=status.HTTP_200_OK)
-
-
-# Next call
-@api_view(['POST'])
-def close_peer(request, id):
-    try:
-        peer = Peer.objects.get(id=id)
-    except Peer.DoesNotExist:
-        return Response({"detail": "Peer not found"}, status=status.HTTP_404_NOT_FOUND)
-      
-    peer.in_call = False
-    peer.last_time_pinged = timezone.now()
-    peer.save()
-    return Response({"detail": "Peer closed successfully"}, status=status.HTTP_200_OK)
-
 
 # Exit call
 @api_view(['DELETE'])
@@ -133,4 +120,5 @@ def peer_info(request, id):
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def test_token(request):
+    print(request.user)
     return Response("passed!")

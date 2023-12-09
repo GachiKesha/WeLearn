@@ -5,13 +5,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fade947d-e686-4cec-afe8-9922db9d8a20" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/WeLearn_Back/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/WeLearn_Back/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WeLearn_Back/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/WeLearn_Back/requirements.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WeLearn_Back/WeAuthentication/welearn/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/WeLearn_Back/WeAuthentication/welearn/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WeLearn_Back/WeAuthentication/welearn/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/WeLearn_Back/WeAuthentication/welearn/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -52,6 +64,7 @@
     "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "front-back-int",
     "last_opened_file_path": "C:/Users/User/Desktop/WeLearn/WeLearn_Back/WeAuthentication/WeAuthentication/settings.py",
     "node.js.detected.package.eslint": "true",
@@ -105,7 +118,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1702146569163</updated>
-      <workItem from="1702146570316" duration="1366000" />
+      <workItem from="1702146570316" duration="10890000" />
     </task>
     <servers />
   </component>

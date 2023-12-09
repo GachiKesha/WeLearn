@@ -14,10 +14,12 @@ class Languages(models.Model):
         return str(self.user.username)
 
 class Peer(models.Model ):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name="peer"
+    )
     peer_id = models.CharField(max_length=50)
-    desired_lang = models.CharField(max_length=50)
-    known_lang = models.CharField(max_length=50)
-    name = models.CharField(max_length=100)
     last_time_pinged = models.DateTimeField(auto_now=True)
     in_call = models.BooleanField(default=False)
 
