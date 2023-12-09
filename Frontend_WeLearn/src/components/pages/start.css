@@ -50,19 +50,13 @@
   padding: 0 14px;
 }
 
-.post select option {
-  font-size: 16px;
-}
-
 select:hover {
   background-color: #999eff;
 }
-
 select:focus {
   border: 1.5px solid #422072;
   background-color: #fff;
 }
-
 
 .link {
   display: flex;
@@ -84,12 +78,6 @@ select:focus {
   font-weight: 600;
   width: 111px;
   height: 111px;
-}
-
-.error-message {
-  font-size: 13px;
-  color: red;
-
 }
 
 .link .start:hover {

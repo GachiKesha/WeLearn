@@ -5,3 +5,22 @@
     text-decoration: none;
     color: black;
   }
+  .setting img:hover {
+    transform: rotate(170deg);
+  }
+  
+  .support-link .support {
+    color: #7076FE;
+    font-weight: 700;
+    text-decoration: none; 
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    padding: 10px 10px;
+  }
+  
+  .support-link .support:hover{
+    text-decoration: underline;
+    color: #7076FE;
+    font-weight: 700;
+  }

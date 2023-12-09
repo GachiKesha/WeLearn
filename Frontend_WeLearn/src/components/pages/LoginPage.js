@@ -20,10 +20,10 @@ function LoginPage() {
         let isValid = true;
 
         if (!email) {
-            setEmailError('Будь ласка, введіть свій email.');
+            setEmailError('Please enter your email.');
             isValid = false;
         } else if (!emailPattern.test(email)) {
-            setEmailError('Будь ласка, введіть дійсну email-адресу.');
+            setEmailError('Please enter a valid email address.');
             isValid = false;
         } else {
             setEmailError('');
@@ -59,7 +59,7 @@ function LoginPage() {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log('Вхід успішний!', data);
+                console.log('Login successful!', data);
 
                 // Обробка успішного входу, збереження токену чи даних користувача в вашому додатку
                 // Додайте код для обробки успішного входу
@@ -68,13 +68,14 @@ function LoginPage() {
                 navigate('/menu');
             } else {
                 const errorData = await response.json();
-                console.error('Вхід не вдалий. Перевірте свої облікові дані.', errorData);
+                console.error('Login failed.', errorData);
+                alert('Login failed. Please check your login information.');
 
                 // Обробка помилки, відображення повідомлення про помилку користувачеві
                 // Додайте код для обробки помилок входу
             }
         } catch (error) {
-            console.error('Помилка під час входу:', error);
+            console.error('Login error:', error);
 
             // Обробка інших помилок
             // Додайте код для обробки інших помилок
@@ -108,12 +109,10 @@ function LoginPage() {
                         />
                         {passwordError && <p className="error-message">{passwordError}</p>}
                         <label className="checkbox-container">
-                            Remember Me
+                            <p>Remember Me</p>
                             <input type="checkbox" id="remember" name="remember"/>
                             <div className="checkmark"></div>
-                            <a href="##" className="forgot-link">
-                                Forgot Password?
-                            </a>
+                            <a href="##" className="forgot-link">Forgot Password?</a>
                         </label>
                         <div className="link">
                             <button type="button" onClick={onSubmit} className="login">
