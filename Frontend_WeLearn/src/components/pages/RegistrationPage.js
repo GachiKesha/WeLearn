@@ -137,7 +137,7 @@ function RegistrationPage() {
           const data = await response.json();
           console.log('Registration successful!', data);
           // Додайте код для обробки успішної реєстрації.
-          
+          localStorage.setItem('token', data);
           // Використайте navigate для переходу на іншу сторінку після успішної реєстрації.
           navigate('/menu'); // Змініть '/success-page' на ваш маршрут
         } else {

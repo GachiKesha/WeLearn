@@ -75,19 +75,34 @@ const peerRef = useRef(null);
 
     const initializePeer = async () => {
         const localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-    
         localVideoRef.current.srcObject = localStream;
-    
         peerRef.current = new Peer();
-    
-        peerRef.current.on('open', (id) => {
+        const token = localStorage.getItem('token')
+        peerRef.current.on('open', async(id) => {
           setPeerId(id);
+          try {
+            const response = await fetch('http://localhost:8000/peer/', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${token}`,
+              },
         });
-    
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const responseData = await response.json();
+        console.log('User data sent successfully:', responseData);
+
+        setTargetPeerId(responseData.peer_Id);
         peerRef.current.on('call', handleIncomingCall);
         // Connect to signaling server or perform other setup if needed
-      };
-    
+      } catch (error) {
+        console.error('Error sending user data to the backend:', error);
+      }
+      });
+    }
       useEffect(() => {
         initializePeer();
     
@@ -157,7 +172,7 @@ const peerRef = useRef(null);
                         : (<img src={cameraOff} alt="Camera Off"/>)
                     }
                 </a>
-                <a href="#">
+                <a href="#" onClick={initializePeer}>
                     <img src={next} alt="Next Logo" />
                 </a>
             </div>
