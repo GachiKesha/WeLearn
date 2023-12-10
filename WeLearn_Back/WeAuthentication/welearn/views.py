@@ -70,9 +70,7 @@ def peer(request):
     else:
         peer_serializer = PeerSerializer(data=request.data)
         if peer_serializer.is_valid():
-            peer_serializer.last_time_pinged = timezone.now()
-            peer_serializer.in_call = False
-            peer_serializer.save(user=request.user)
+            peer_serializer.save(user=request.user, last_time_pinged__gte=datetime.now(), in_call=False)
             return Response(peer_serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(peer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -89,31 +87,6 @@ def ping_peer(request, id):
     peer.save()
     return Response({"detail": "Peer pinged successfully"}, status=status.HTTP_200_OK)
 
-# Exit call
-@api_view(['DELETE'])
-def delete_peer(request, id):
-    try:
-        peer = Peer.objects.get(id=id)
-    except Peer.DoesNotExist:
-        return Response({"detail": "Peer not found"}, status=status.HTTP_404_NOT_FOUND)
-
-    peer.delete()
-    return Response({"detail": "Peer deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
-
-
-# debug purposes
-@api_view(['GET'])
-def peer_info(request, id):
-    try:
-        peer = Peer.objects.get(id=id)
-    except Peer.DoesNotExist:
-        return Response({"detail": "Peer not found"}, status=status.HTTP_404_NOT_FOUND)
-
-    peer_serializer = PeerSerializer(peer)
-    return Response(peer_serializer.data, status=status.HTTP_200_OK)
-    peer.last_time_pinged = timezone.now()
-    peer.save()
-    return Response({"detail": "Peer pinged successfully"}, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
