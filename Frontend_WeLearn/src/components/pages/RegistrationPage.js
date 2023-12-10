@@ -141,9 +141,9 @@ function RegistrationPage() {
           const token = localStorage.getItem('token');
           if (token) {
               // Вивести токен в консоль
-              console.log('Отриманий токен:', token);
+              console.log('Token:', token);
           } else {
-              console.log('Токен відсутній в localStorage.');
+              console.log('Token not found');
           }
           // Використайте navigate для переходу на іншу сторінку після успішної реєстрації.
           navigate('/menu'); // Змініть '/success-page' на ваш маршрут
