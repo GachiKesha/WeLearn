@@ -3,7 +3,6 @@ import styles from './VideoCallPage.module.css';
 import Peer from "peerjs";
 import Header from '../common/Header';
 import Support from '../common/Support';
-import settingLogo from './settingLogo.png';
 import cameraOn from './cameraOn.png';
 import cameraOff from './cameraOff.png';
 import next from './next.png';
@@ -116,11 +115,6 @@ const peerRef = useRef(null);
 
     return <div>
     <Header />
-        <div className='setting'>
-    <a href="#">
-        <img src={settingLogo} alt="Setting Logo" />
-      </a>
-    </div>
         <div className={styles.mainContainer}>
             <div className={styles.videosSection}>
                 <video className={styles.videoElement} ref={localVideoRef} autoPlay playsInline muted />
