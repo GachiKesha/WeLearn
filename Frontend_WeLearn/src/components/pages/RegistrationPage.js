@@ -137,14 +137,26 @@ function RegistrationPage() {
           const data = await response.json();
           console.log('Registration successful!', data);
           // Додайте код для обробки успішної реєстрації.
+<<<<<<< HEAD
+=======
+
+>>>>>>> front-back-int
           localStorage.setItem('token', JSON.stringify(data));
           const token = localStorage.getItem('token');
           if (token) {
               // Вивести токен в консоль
+<<<<<<< HEAD
               console.log('Token:', token);
           } else {
               console.log('Token not found');
           }
+=======
+              console.log('Отриманий токен:', token);
+          } else {
+              console.log('Токен відсутній в localStorage.');
+          }
+
+>>>>>>> front-back-int
           // Використайте navigate для переходу на іншу сторінку після успішної реєстрації.
           navigate('/menu'); // Змініть '/success-page' на ваш маршрут
         } else {

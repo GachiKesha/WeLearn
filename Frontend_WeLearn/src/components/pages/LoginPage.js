@@ -44,7 +44,7 @@ function LoginPage() {
             // Якщо перевірка форми не пройшла, не продовжуємо виклик API
             return;
         }
-
+        
         try {
             const response = await fetch('http://127.0.0.1:8000/login/', {
                 method: 'POST',
@@ -60,14 +60,24 @@ function LoginPage() {
             if (response.ok) {
                 const data = await response.json();
                 console.log('Login successful!', data);
+<<<<<<< HEAD
 
+=======
+                
+>>>>>>> front-back-int
                 localStorage.setItem('token', JSON.stringify(data));
           const token = localStorage.getItem('token');
           if (token) {
               // Вивести токен в консоль
+<<<<<<< HEAD
               console.log('Token:', token);
           } else {
               console.log('Token not found');
+=======
+              console.log('Отриманий токен:', token);
+          } else {
+              console.log('Токен відсутній в localStorage.');
+>>>>>>> front-back-int
           }
                 // Обробка успішного входу, збереження токену чи даних користувача в вашому додатку
                 // Додайте код для обробки успішного входу
