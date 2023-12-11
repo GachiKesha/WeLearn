@@ -61,7 +61,7 @@ function LoginPage() {
             if (response.ok) {
                 const data = await response.json();
                 console.log('Login successful!', data);
-                localStorage.setItem('token', JSON.stringify(data.token));
+                localStorage.setItem('token', data.token);
                 // Обробка успішного входу, збереження токену чи даних користувача в вашому додатку
                 // Додайте код для обробки успішного входу
 
