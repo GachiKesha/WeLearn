@@ -137,6 +137,7 @@ function RegistrationPage() {
         if (response.ok) {
           const data = await response.json();
           console.log('Registration successful!');
+          localStorage.setItem('isAuthenticated', true);
          
           localStorage.setItem('token', data.token);
           const token = localStorage.getItem('token');

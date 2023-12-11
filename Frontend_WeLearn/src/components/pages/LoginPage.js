@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Link, useNavigate} from 'react-router-dom'; // Додаємо useHistory
+import {Link, useNavigate} from 'react-router-dom'; 
 import Header from '../common/Header';
 import AnimatedFooter from '../common/AnimatedFooter';
 import Support from '../common/Support';
@@ -42,7 +42,7 @@ function LoginPage() {
     const onSubmit = async () => {
         const isValid = validateFields();
         if (!isValid) {
-            // Якщо перевірка форми не пройшла, не продовжуємо виклик API
+            
             return;
         }
         
@@ -60,6 +60,7 @@ function LoginPage() {
 
             if (response.ok) {
                 const data = await response.json();
+                localStorage.setItem('isAuthenticated', true);
                 console.log('Login successful!');
                 localStorage.setItem('token', data.token);
 
