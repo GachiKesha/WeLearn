@@ -138,7 +138,7 @@ function RegistrationPage() {
           const data = await response.json();
           console.log('Registration successful!', data);
           // Додайте код для обробки успішної реєстрації.
-          localStorage.setItem('token', JSON.stringify(data));
+          localStorage.setItem('token', data.token);
           const token = localStorage.getItem('token');
           if (token) {
               // Вивести токен в консоль
