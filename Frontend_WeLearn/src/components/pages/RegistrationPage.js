@@ -136,21 +136,35 @@ function RegistrationPage() {
   
         if (response.ok) {
           const data = await response.json();
-          console.log('Registration successful!', data);
-          // Додайте код для обробки успішної реєстрації.
-          localStorage.setItem('token',  data.token);
-
-
-          // Використайте navigate для переходу на іншу сторінку після успішної реєстрації.
-          navigate('/menu'); // Змініть '/success-page' на ваш маршрут
+          console.log('Registration successful!');
+         
+          localStorage.setItem('token', data.token);
+          const token = localStorage.getItem('token');
+          if (token) {
+             
+              console.log('Token:', token);
+          } else {
+              console.log('Token not found');
+          }
+          localStorage.setItem('username', data.user.username);
+          localStorage.setItem('knownLanguage', data.user.languages.known_language);
+          localStorage.setItem('desiredLanguage', data.user.languages.desired_language);
+          const username = localStorage.getItem('username');
+          const knownLanguage = localStorage.getItem('knownLanguage');
+          const desiredLanguage = localStorage.getItem('desiredLanguage');
+          console.log('Username:', username);
+          console.log('Known Language:', knownLanguage);
+          console.log('Desired Language:', desiredLanguage);
+         
+          navigate('/menu'); 
         } else {
           const errorData = await response.json();
           console.error('Registration failed. Please check the form for errors.', errorData);
-          // Додайте код для обробки помилок під час реєстрації.
+          
         }
       } catch (error) {
         console.error('An error occurred while processing the registration.', error);
-        // Додайте код для обробки інших помилок.
+        
       }
     }
   };

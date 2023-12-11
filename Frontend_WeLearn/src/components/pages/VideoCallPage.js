@@ -18,6 +18,10 @@ function VideoCallPage() {
     const [MuteMicrophone, setMuteMicrophone] = useState(false);
     const [CameraOff, setCameraOff] = useState(true);
 
+    const knownLanguage = localStorage.getItem('knownLanguage');
+    const desiredLanguage = localStorage.getItem('desiredLanguage');
+    const username = localStorage.getItem('username');
+
     const MicrophoneToggle = () => {
         if (localVideoRef.current) {
           setMuteMicrophone((prev) => !prev);
@@ -77,7 +81,6 @@ const peerRef = useRef(null);
         localVideoRef.current.srcObject = localStream;
         peerRef.current = new Peer();
         const token = localStorage.getItem('token')
-        console.log(token);
         peerRef.current.on('open', async(id) => {
           setPeerId(id);
           try {
@@ -87,7 +90,6 @@ const peerRef = useRef(null);
                 'Content-Type': 'application/json',
                 'Authorization': `Token ${token}`,
               },
-                body: JSON.stringify({peer_id: id})
         });
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -142,8 +144,9 @@ const peerRef = useRef(null);
 
                 <div>
                     <div>Your Peer ID: {peerId}</div>
-                    <div>Language: {}</div>
-                    <div>Name: {}</div>
+                    <div>Known Language: {knownLanguage}</div>
+                    <div>Desired Language: {desiredLanguage}</div>
+                    <div>Name: {username}</div>
                     <div>
                         <input value={targetPeerId} onChange={(e) => setTargetPeerId(e.target.value)}/>
                         <button className={styles.startCallBtn} onClick={callPeer}>Call</button>

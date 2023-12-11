@@ -60,10 +60,26 @@ function LoginPage() {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log('Login successful!', data);
+                console.log('Login successful!');
                 localStorage.setItem('token', data.token);
-                // Обробка успішного входу, збереження токену чи даних користувача в вашому додатку
-                // Додайте код для обробки успішного входу
+
+                const token = localStorage.getItem('token');
+                if (token) {
+                    console.log('Token:', token);
+                } else {
+                    console.log('Token not found');
+                }
+
+                localStorage.setItem('username', data.user.username);
+                localStorage.setItem('knownLanguage', data.user.languages.known_language);
+                localStorage.setItem('desiredLanguage', data.user.languages.desired_language);
+                const username = localStorage.getItem('username');
+                const knownLanguage = localStorage.getItem('knownLanguage');
+                const desiredLanguage = localStorage.getItem('desiredLanguage');
+                console.log('Username:', username);
+                console.log('Known Language:', knownLanguage);
+                console.log('Desired Language:', desiredLanguage);
+                
 
                 console.log('Navigating to /menu');
                 navigate('/menu');
@@ -72,14 +88,12 @@ function LoginPage() {
                 console.error('Login failed.', errorData);
                 alert('Login failed. Please check your login information.');
 
-                // Обробка помилки, відображення повідомлення про помилку користувачеві
-                // Додайте код для обробки помилок входу
+                
             }
         } catch (error) {
             console.error('Login error:', error);
 
-            // Обробка інших помилок
-            // Додайте код для обробки інших помилок
+            
         }
     };
 

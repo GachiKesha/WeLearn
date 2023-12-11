@@ -13,6 +13,13 @@ function MenuPage() {
   const localVideoRef = useRef();
   const peerRef = useRef();
   const [peerId, setPeerId] = useState(null);
+  const [username, setUsername] = useState(null); // Додайте стан для імені користувача
+
+  useEffect(() => {
+    // Отримайте ім'я користувача з localStorage
+    const storedUsername = localStorage.getItem('username');
+    setUsername(storedUsername);
+  }, []);
 
   const onStart = () => {
     console.log('Start button clicked');
@@ -28,18 +35,12 @@ function MenuPage() {
         localVideoRef.current.srcObject = localStream;
       }
 
-      peerRef.current = new Peer();
-
-      peerRef.current.on('open', (id) => {
-        setPeerId(id);
-      });
-
-      peerRef.current.on('call', handleIncomingCall);
-      // Connect to signaling server or perform other setup if needed
+     
     } catch (error) {
       console.error('Error accessing media devices:', error);
     }
   };
+
 
   useEffect(() => {
     initializePeer();
@@ -48,6 +49,7 @@ function MenuPage() {
       // Additional cleanup or resource release if needed
     };
   }, []);
+
 
   const handleIncomingCall = (call) => {
     // Handle incoming call if needed
@@ -65,9 +67,9 @@ function MenuPage() {
         <div className="user-info">
           <img className="user-icon" src={userIcon} alt="User Icon" />
           <div className="user-name">
-            <p>User name</p>
+
+            <p>{username}</p>
           </div>
-        
         </div>
       </div>
 
