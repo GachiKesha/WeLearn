@@ -57,8 +57,8 @@ def get_user(request, id):
 @permission_classes([IsAuthenticated])
 def peer(request):
     existing_peer = Peer.objects.filter(
-        known_lang=request.user.languages.desired_language,
-        desired_lang=request.user.languages.known_language,
+        user__languages__known_language=request.user.languages.desired_language,
+        user__languages__desired_language=request.user.languages.known_language,
         last_time_pinged__gte=datetime.now() - timedelta(minutes=1),
         in_call=False).first()
 
@@ -70,7 +70,9 @@ def peer(request):
     else:
         peer_serializer = PeerSerializer(data=request.data)
         if peer_serializer.is_valid():
-            peer_serializer.save(user=request.user, last_time_pinged__gte=datetime.now(), in_call=False)
+            if request.user.peer:
+                request.user.peer.delete()
+            peer_serializer.save(user=request.user, last_time_pinged=datetime.now(), in_call=False)
             return Response(peer_serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(peer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
