@@ -70,9 +70,10 @@ def peer(request):
     else:
         peer_serializer = PeerSerializer(data=request.data)
         if peer_serializer.is_valid():
-            if request.user.peer:
-                request.user.peer.delete()
-            peer_serializer.save(user=request.user, last_time_pinged=datetime.now(), in_call=False)
+            existing_peer = Peer.objects.filter(user=request.user)
+            if existing_peer:
+                existing_peer.delete()
+            peer_serializer.save(user=request.user, last_time_pinged=timezone.now(), in_call=False)
             return Response(peer_serializer.data, status=status.HTTP_201_CREATED)
         else:
           return Response(peer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
