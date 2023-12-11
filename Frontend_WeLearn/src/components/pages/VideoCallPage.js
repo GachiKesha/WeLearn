@@ -77,6 +77,7 @@ const peerRef = useRef(null);
         localVideoRef.current.srcObject = localStream;
         peerRef.current = new Peer();
         const token = localStorage.getItem('token')
+        console.log(token);
         peerRef.current.on('open', async(id) => {
           setPeerId(id);
           try {

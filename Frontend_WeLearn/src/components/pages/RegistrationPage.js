@@ -138,14 +138,9 @@ function RegistrationPage() {
           const data = await response.json();
           console.log('Registration successful!', data);
           // Додайте код для обробки успішної реєстрації.
-          localStorage.setItem('token', JSON.stringify(data));
-          const token = localStorage.getItem('token');
-          if (token) {
-              // Вивести токен в консоль
-              console.log('Token:', token);
-          } else {
-              console.log('Token not found');
-          }
+          localStorage.setItem('token',  JSON.stringify(data.token));
+
+
           // Використайте navigate для переходу на іншу сторінку після успішної реєстрації.
           navigate('/menu'); // Змініть '/success-page' на ваш маршрут
         } else {

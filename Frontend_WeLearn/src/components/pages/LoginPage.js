@@ -61,13 +61,7 @@ function LoginPage() {
             if (response.ok) {
                 const data = await response.json();
                 console.log('Login successful!', data);
-                localStorage.setItem('token', JSON.stringify(data));
-          const token = localStorage.getItem('token');
-          if (token) {
-              console.log('Token:', token);
-          } else {
-              console.log('Token not found');
-          }
+                localStorage.setItem('token', JSON.stringify(data.token));
                 // Обробка успішного входу, збереження токену чи даних користувача в вашому додатку
                 // Додайте код для обробки успішного входу
 
