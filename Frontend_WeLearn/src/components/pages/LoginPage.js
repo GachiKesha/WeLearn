@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom'; // Додаємо useHistory
 import Header from '../common/Header';
+import AnimatedFooter from '../common/AnimatedFooter';
 import Support from '../common/Support';
 import './style.css';
 import './login.css';
@@ -135,6 +136,7 @@ function LoginPage() {
                 </div>
             </div>
             <Support/>
+            <AnimatedFooter/>
         </div>
     );
 }

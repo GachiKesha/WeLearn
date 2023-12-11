@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../common/Header'; 
+import AnimatedFooter from '../common/AnimatedFooter';
 import Support from '../common/Support';
 import './style.css'; 
 import './registr.css'; 
@@ -204,6 +205,7 @@ function RegistrationPage() {
           </div>
         </div>
         <Support/>
+        <AnimatedFooter/>
    </div>
   );
 }

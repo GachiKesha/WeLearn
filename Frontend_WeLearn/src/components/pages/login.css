@@ -1,6 +1,6 @@
 .container1 {
-  padding: 99px 27px;
-  min-height: 91vh;
+  padding: 66px 27px;
+  min-height: 70vh;
   justify-content: center;
   flex-direction: column;
   background-color: var(--background-color);
@@ -17,7 +17,7 @@
 
 .container1 img{
   width: 148px;
-  height: 158px;
+  height: 154px;
 }
 
 .post1 input {
@@ -45,18 +45,22 @@
   border: none;
   outline: none;
   cursor: pointer;
-  background: #262A7F;
   padding: 15px 0;
   border-radius: 6px;
   color: #fff;
   font-size: 1.25rem;
   font-weight: 600;
-  transition: 0.2s ease;
-  width: 104%;
+  width: 100%;
+  background-size: 300% 100%;
+  transition: all .4s ease-in-out;
 }
 
 .link .login:hover {
-  background: #7076FE;
+  background-position: 100% 0;
+  transition: all .4s ease-in-out;
+}
+link .login:focus {
+  outline: none;
 }
 
 .link .createAcc {
@@ -85,7 +89,9 @@
   position: fixed;
   bottom: 0;
   right: 0;
-  padding: 10px 10px;
+  padding: 12px 21px;
+  z-index: 9999; 
+  font-size: 22px;
 }
 
 .support-link .support:hover{
@@ -103,7 +109,8 @@
 .checkbox-container {
   display: flex;
   align-items: center;
-  margin: 2px 0 5px
+  margin: 2px 0 5px;
+  font-size: 15px;
 }
 
 .checkmark {
@@ -132,3 +139,4 @@ input[type="checkbox"]:checked + .checkmark::before {
   text-align: center;
   line-height: 16px;
 }
+
