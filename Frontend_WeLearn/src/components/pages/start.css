@@ -13,7 +13,7 @@
   display: flex;
   flex-direction: column;
   background: #fff;
-  padding: 211px 70px;
+  padding: 183px 70px;
   max-width: 500px;
   width: 100%;
   
@@ -70,7 +70,6 @@ select:focus {
   border: none;
   outline: none;
   cursor: pointer;
-  background: #262A7F;
   padding: 20px 36px 75px;
   border-radius: 100%;
   color: #fff;
@@ -78,9 +77,15 @@ select:focus {
   font-weight: 600;
   width: 111px;
   height: 111px;
+  background-size: 300% 100%;
+  transition: all .4s ease-in-out;
 }
 
 .link .start:hover {
-  background: #7076FE;
+  background-position: 100% 0;
+  transition: all .4s ease-in-out;
+}
+.link .start:focus {
+  outline: none;
 }
 

@@ -1,5 +1,5 @@
 .box {
-  min-height: 65vh;
+  min-height: 57vh;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -44,27 +44,17 @@
   margin-left: 10px;
 }
 
-.support-link .support {
-  color: #7076FE;
-  font-weight: 700;
-  text-decoration: none;
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  padding: 10px 10px;
+.link {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
 }
 
-.support-link .support:hover {
-  text-decoration: underline;
-  color: #7076FE;
-  font-weight: 700;
-}
-
-.start1 {
+.link .start1 {
   border: none;
   outline: none;
   cursor: pointer;
-  background: #262A7F;
   padding: 20px 36px 75px;
   border-radius: 100%;
   color: #fff;
@@ -72,21 +62,30 @@
   font-weight: 600;
   width: 111px;
   height: 111px;
-  margin-top: 72px;
+  margin-top: 24px;
+  background-size: 300% 100%;
+  transition: all .4s ease-in-out;
 }
 
 .link .start1:hover {
-  background: #7076FE;
+  background-position: 100% 0;
+  transition: all .4s ease-in-out;
+}
+
+.link .start1:focus {
+  outline: none;
 }
 
 
 .videoElement {
   border-radius: 20px;
-  width: 50%;
-  max-width: 700px;
+  width: 100%;
+  max-width: 642px;
   position: absolute;
   left: 50%;
-  border: 1px solid black;
+  border: 2px solid #20225f;
   transform: translate(-50%, -50%);
-  top: 45%;
+  top: 39%;
+  height: 400px;
+  object-fit: cover;
 }

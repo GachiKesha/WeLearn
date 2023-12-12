@@ -1,5 +1,5 @@
 .container1 {
-  padding: 66px 27px;
+  padding: 0px 17px;
   min-height: 70vh;
   justify-content: center;
   flex-direction: column;
@@ -50,7 +50,7 @@
   color: #fff;
   font-size: 1.25rem;
   font-weight: 600;
-  width: 100%;
+  width: 104%;
   background-size: 300% 100%;
   transition: all .4s ease-in-out;
 }
@@ -59,7 +59,7 @@
   background-position: 100% 0;
   transition: all .4s ease-in-out;
 }
-link .login:focus {
+.link .login:focus {
   outline: none;
 }
 
@@ -82,23 +82,7 @@ link .login:focus {
 .forgot-link:hover {
   text-decoration: underline;
 }
-.support-link .support {
-  color: #7076FE;
-  font-weight: 700;
-  text-decoration: none; 
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  padding: 12px 21px;
-  z-index: 9999; 
-  font-size: 22px;
-}
 
-.support-link .support:hover{
-  text-decoration: underline;
-  color: #7076FE;
-  font-weight: 700;
-}
 
 .button {
   margin-top: 25px;

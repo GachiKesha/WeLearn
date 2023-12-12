@@ -69,14 +69,16 @@ a{
 .support-link .support {
   color: #7076FE;
   font-weight: 700;
-  text-decoration: none;
+  text-decoration: none; 
   position: fixed;
   bottom: 0;
   right: 0;
-  padding: 10px 10px;
+  padding: 12px 21px;
+  z-index: 9999; 
+  font-size: 22px;
 }
 
-.support-link .support:hover {
+.support-link .support:hover{
   text-decoration: underline;
   color: #7076FE;
   font-weight: 700;

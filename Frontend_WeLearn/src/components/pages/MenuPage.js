@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Peer from 'peerjs';
 import Header from '../common/Header';
+import AnimatedFooter from '../common/AnimatedFooter';
 import Support from '../common/Support';
 import './style.css';
 import './menu.css';
@@ -58,14 +59,14 @@ function MenuPage() {
   return (
     <div>
       <Header />
-      <div className='setting'>
+      <div className="box flex">
+        <div className="user-info">
+          <img className="user-icon" src={userIcon} alt="User Icon" />
+          <div className='setting'>
         <a href="#">
           <img src={settingLogo} alt="Setting Logo" />
         </a>
       </div>
-      <div className="box flex">
-        <div className="user-info">
-          <img className="user-icon" src={userIcon} alt="User Icon" />
           <div className="user-name">
 
             <p>{username}</p>
@@ -80,7 +81,6 @@ function MenuPage() {
       </div>
 
       <video ref={localVideoRef} autoPlay playsInline muted className="videoElement" />
-
       <Support />
     </div>
   );
