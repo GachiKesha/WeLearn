@@ -56,27 +56,38 @@ def get_user(request, id):
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def peer(request):
+    # Delete existing peer in DB
+    if Peer.objects.filter(user=request.user):
+        Peer.objects.filter(user=request.user).delete()
+
+    # Filter to find partner
     existing_peer = Peer.objects.filter(
         user__languages__known_language=request.user.languages.desired_language,
         user__languages__desired_language=request.user.languages.known_language,
         last_time_pinged__gte=datetime.now() - timedelta(minutes=1),
-        in_call=False).first()
+        in_call=False
+        ).first()
 
-    if existing_peer:
+    # Check if filter returned non-empty queryset (partner)
+    if existing_peer:  # Found.
         existing_peer_serializers = PeerSerializer(existing_peer)
         existing_peer.in_call = True
         existing_peer.save()
-        return Response(existing_peer_serializers.data, status=status.HTTP_200_OK)
-    else:
+
+        peer_serializer = PeerSerializer(data=request.data)
+        if peer_serializer.is_valid():  # Bad data
+            peer_serializer.save(user=request.user, last_time_pinged=timezone.now(), in_call=True)
+            return Response(existing_peer_serializers.data, status=status.HTTP_200_OK)
+        else:
+            return Response(peer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    else:  # Nope.
         peer_serializer = PeerSerializer(data=request.data)
         if peer_serializer.is_valid():
-            existing_peer = Peer.objects.filter(user=request.user)
-            if existing_peer:
-                existing_peer.delete()
             peer_serializer.save(user=request.user, last_time_pinged=timezone.now(), in_call=False)
-            return Response(peer_serializer.data, status=status.HTTP_201_CREATED)
-        else:
-          return Response(peer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"detail": "You are in queue for companion..."}, status=status.HTTP_201_CREATED)
+        else:  # Bad data
+            return Response(peer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
