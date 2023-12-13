@@ -30,6 +30,7 @@ class PeerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Peer
         fields = ['id', 'peer_id']
+        read_only_fields = ['user']
 
     def create(self, validated_data):
         return Peer.objects.create(**validated_data)
@@ -37,7 +38,6 @@ class PeerSerializer(serializers.ModelSerializer):
     def delete(self, instance):
         # Add your custom delete logic here
         return instance.delete()
-
 
 
 

@@ -1,4 +1,5 @@
 from django.apps import AppConfig
+from django.db import connection
 
 
 class WelearnConfig(AppConfig):
@@ -6,5 +7,5 @@ class WelearnConfig(AppConfig):
     name = 'welearn'
 
     def ready(self):
-        from .models import Peer
-        Peer.objects.all().delete()  # Auto-clear peers, for now
+        with connection.cursor() as cursor:
+            cursor.execute("DELETE FROM sqlite_sequence WHERE name = 'welearn_peer'")

@@ -137,22 +137,22 @@ function RegistrationPage() {
         if (response.ok) {
           const data = await response.json();
           console.log('Registration successful!');
-          localStorage.setItem('isAuthenticated', true);
+          sessionStorage.setItem('isAuthenticated', true);
          
-          localStorage.setItem('token', data.token);
-          const token = localStorage.getItem('token');
+          sessionStorage.setItem('token', data.token);
+          const token = sessionStorage.getItem('token');
           if (token) {
              
               console.log('Token:', token);
           } else {
               console.log('Token not found');
           }
-          localStorage.setItem('username', data.user.username);
-          localStorage.setItem('knownLanguage', data.user.languages.known_language);
-          localStorage.setItem('desiredLanguage', data.user.languages.desired_language);
-          const username = localStorage.getItem('username');
-          const knownLanguage = localStorage.getItem('knownLanguage');
-          const desiredLanguage = localStorage.getItem('desiredLanguage');
+          sessionStorage.setItem('username', data.user.username);
+          sessionStorage.setItem('knownLanguage', data.user.languages.known_language);
+          sessionStorage.setItem('desiredLanguage', data.user.languages.desired_language);
+          const username = sessionStorage.getItem('username');
+          const knownLanguage = sessionStorage.getItem('knownLanguage');
+          const desiredLanguage = sessionStorage.getItem('desiredLanguage');
           console.log('Username:', username);
           console.log('Known Language:', knownLanguage);
           console.log('Desired Language:', desiredLanguage);

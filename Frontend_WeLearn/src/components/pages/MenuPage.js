@@ -17,8 +17,8 @@ function MenuPage() {
   const [username, setUsername] = useState(null); // Додайте стан для імені користувача
 
   useEffect(() => {
-    // Отримайте ім'я користувача з localStorage
-    const storedUsername = localStorage.getItem('username');
+    // Отримайте ім'я користувача з sessionStorage
+    const storedUsername = sessionStorage.getItem('username');
     setUsername(storedUsername);
   }, []);
 

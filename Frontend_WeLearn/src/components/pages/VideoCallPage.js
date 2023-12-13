@@ -22,9 +22,9 @@ function VideoCallPage() {
     const remoteVideoRef = useRef(null);
     const peerRef = useRef(null);
 
-    const knownLanguage = localStorage.getItem('knownLanguage');
-    const desiredLanguage = localStorage.getItem('desiredLanguage');
-    const username = localStorage.getItem('username');
+    const knownLanguage = sessionStorage.getItem('knownLanguage');
+    const desiredLanguage = sessionStorage.getItem('desiredLanguage');
+    const username = sessionStorage.getItem('username');
 
     const toggleMicrophone = () => {
         if (localVideoRef.current) {
@@ -82,7 +82,7 @@ function VideoCallPage() {
         const localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         localVideoRef.current.srcObject = localStream;
         peerRef.current = new Peer();
-        const token = localStorage.getItem('token')
+        const token = sessionStorage.getItem('token')
         peerRef.current.on('open', async(id) => {
             setPeerId(id);
             try {
@@ -94,27 +94,24 @@ function VideoCallPage() {
                     },
                     body: JSON.stringify({
                         peer_id: id
+
                     }),
                 });
 
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-
                 const responseData = await response.json();
                 console.log('User data sent successfully:', responseData);
-
                 if(response.status==200){
-                    console.log('Calling to:', responseData);
+                    console.log('Calling to:', responseData.peer_id);
                     setTargetPeerId(responseData.peer_id);
                     console.log('logs:', targetPeerId);
-                    callPeer();
                 }
                 if(response.status==201){
                     console.log('Waiting for call...')
                     peerRef.current.on('call', handleIncomingCall);
                 }
-
             } catch (error) {
                 console.error('Data sending error:', error);
             }
@@ -143,6 +140,7 @@ function VideoCallPage() {
 
             }
         };
+
     }, []);
 
     useEffect(() => {

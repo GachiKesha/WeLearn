@@ -8,7 +8,7 @@ class PeerService:
     @classmethod
     def find_or_queue_peer(cls, request):
         # Delete existing peers of user
-        Peer.objects.filter(user=request.user).delete()
+        # Peer.objects.filter(user=request.user).delete()
         # Filter to find companion
         existing_peer = Peer.objects.filter(
             user__languages__known_language=request.user.languages.desired_language,
@@ -23,17 +23,37 @@ class PeerService:
             existing_peer.in_call = True
             existing_peer.save()
 
-            peer_serializer = PeerSerializer(data=request.data)
-            if peer_serializer.is_valid():
-                peer_serializer.save(user=request.user, last_time_pinged=timezone.now(), in_call=True)
-                return existing_peer_serializers.data, 200
+            if not Peer.objects.filter(user=request.user).first():
+                peer_serializer = PeerSerializer(data=request.data)
+                if peer_serializer.is_valid():
+                    peer_serializer.save(user=request.user, last_time_pinged=timezone.now(), in_call=True)
+                    return existing_peer_serializers.data, 200
+                else:
+                    return peer_serializer.errors, 400
             else:
-                return peer_serializer.errors, 400
+                peer_serializer = PeerSerializer(instance=Peer.objects.filter(user=request.user).first(),
+                                                 data=request.data,
+                                                 partial=True)
+                if peer_serializer.is_valid():
+                    peer_serializer.save()
+                    return existing_peer_serializers.data, 200
+                else:
+                    return peer_serializer.errors, 400
 
         else:
-            peer_serializer = PeerSerializer(data=request.data)
+            if not Peer.objects.filter(user=request.user).first():
+                peer_serializer = PeerSerializer(data=request.data)
+                if peer_serializer.is_valid():
+                    peer_serializer.save(user=request.user, last_time_pinged=timezone.now(), in_call=False)
+                    return "You are in the queue for a companion...", 201
+                else:
+                    return peer_serializer.errors, 400
+            else:
+                peer_serializer = PeerSerializer(instance=Peer.objects.filter(user=request.user).first(),
+                                                 data=request.data,
+                                                 partial=True)
             if peer_serializer.is_valid():
-                peer_serializer.save(user=request.user, last_time_pinged=timezone.now(), in_call=False)
+                peer_serializer.save()
                 return "You are in the queue for a companion...", 201
             else:
                 return peer_serializer.errors, 400
