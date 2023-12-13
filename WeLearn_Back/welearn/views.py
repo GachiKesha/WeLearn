@@ -42,7 +42,7 @@ def signup(request):
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def peer(request):
-    result = PeerService.find_or_queue_peer(request.user)
+    result = PeerService.find_or_queue_peer(request)
     if result:
         return Response(result[0], status=result[1])
     else:
