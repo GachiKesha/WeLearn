@@ -28,33 +28,6 @@ function MenuPage() {
     navigate('/videocall');
   };
 
-  const initializePeer = async () => {
-    try {
-      const localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-
-      if (localVideoRef.current) {
-        localVideoRef.current.srcObject = localStream;
-      }
-
-     
-    } catch (error) {
-      console.error('Error accessing media devices:', error);
-    }
-  };
-
-
-  useEffect(() => {
-    initializePeer();
-
-    return () => {
-      // Additional cleanup or resource release if needed
-    };
-  }, []);
-
-
-  const handleIncomingCall = (call) => {
-    // Handle incoming call if needed
-  };
 
   return (
     <div>

@@ -34,6 +34,6 @@ class PeerService:
             peer_serializer = PeerSerializer(data=request.data)
             if peer_serializer.is_valid():
                 peer_serializer.save(user=request.user, last_time_pinged=timezone.now(), in_call=False)
-                return {"detail": "You are in the queue for a companion..."}, 201
+                return "You are in the queue for a companion...", 201
             else:
                 return peer_serializer.errors, 400
