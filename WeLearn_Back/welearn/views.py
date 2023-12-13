@@ -8,12 +8,10 @@ from rest_framework import status
 from django.utils import timezone
 
 from django.shortcuts import get_object_or_404
-from welearn.models import User, Peer
+from .models import User, Peer
 from rest_framework.authtoken.models import Token
-
-from welearn.serializers import UserSerializer, PeerSerializer
-
-
+from .services import PeerService
+from .serializers import UserSerializer, PeerSerializer
 
 
 @api_view(['POST'])
@@ -24,8 +22,8 @@ def login(request):
     token, created = Token.objects.get_or_create(user=user)
     serializer = UserSerializer(instance=user)
     return Response({"token": token.key, "user": serializer.data})
-
-
+  
+  
 @api_view(['POST'])
 def signup(request):
     serializer = UserSerializer(data=request.data)
@@ -40,54 +38,15 @@ def signup(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# Debug purposes
-@api_view(['GET'])
-def get_user(request, id):
-    try:
-        user = User.objects.get(id=id)
-    except User.DoesNotExist:
-        return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-
-    serializer = UserSerializer(user)
-    return Response(serializer.data)
-
-
 @api_view(['POST'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def peer(request):
-    # Delete existing peer in DB
-    if Peer.objects.filter(user=request.user):
-        Peer.objects.filter(user=request.user).delete()
-
-    # Filter to find partner
-    existing_peer = Peer.objects.filter(
-        user__languages__known_language=request.user.languages.desired_language,
-        user__languages__desired_language=request.user.languages.known_language,
-        last_time_pinged__gte=datetime.now() - timedelta(minutes=1),
-        in_call=False
-        ).first()
-
-    # Check if filter returned non-empty queryset (partner)
-    if existing_peer:  # Found.
-        existing_peer_serializers = PeerSerializer(existing_peer)
-        existing_peer.in_call = True
-        existing_peer.save()
-
-        peer_serializer = PeerSerializer(data=request.data)
-        if peer_serializer.is_valid():  # Bad data
-            peer_serializer.save(user=request.user, last_time_pinged=timezone.now(), in_call=True)
-            return Response(existing_peer_serializers.data, status=status.HTTP_200_OK)
-        else:
-            return Response(peer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    else:  # Nope.
-        peer_serializer = PeerSerializer(data=request.data)
-        if peer_serializer.is_valid():
-            peer_serializer.save(user=request.user, last_time_pinged=timezone.now(), in_call=False)
-            return Response({"detail": "You are in queue for companion..."}, status=status.HTTP_201_CREATED)
-        else:  # Bad data
-            return Response(peer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    result = PeerService.find_or_queue_peer(request.user)
+    if result:
+        return Response(result[0], status=result[1])
+    else:
+        return Response({"error": "Something went wrong"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(['POST'])
@@ -96,11 +55,10 @@ def ping_peer(request, id):
         peer = Peer.objects.get(id=id)
     except Peer.DoesNotExist:
         return Response({"detail": "Peer not found"}, status=status.HTTP_404_NOT_FOUND)
-
+      
     peer.last_time_pinged = timezone.now()
     peer.save()
     return Response({"detail": "Peer pinged successfully"}, status=status.HTTP_200_OK)
-
 
 
 @api_view(['GET'])
