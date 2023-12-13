@@ -34,7 +34,9 @@ class PeerSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         return Peer.objects.create(**validated_data)
 
-
+    def delete(self, instance):
+        # Add your custom delete logic here
+        return instance.delete()
 
 
 

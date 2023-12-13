@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+
 class Languages(models.Model):
     user = models.OneToOneField(
         User,
@@ -13,7 +14,8 @@ class Languages(models.Model):
     def __str__(self):
         return str(self.user.username)
 
-class Peer(models.Model ):
+
+class Peer(models.Model):
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
@@ -24,7 +26,7 @@ class Peer(models.Model ):
     in_call = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.name}'s Peer"
+        return f"{self.user.username}'s Peer"
 
 
 
