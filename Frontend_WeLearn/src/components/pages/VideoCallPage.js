@@ -90,6 +90,9 @@ const peerRef = useRef(null);
                 'Content-Type': 'application/json',
                 'Authorization': `Token ${token}`,
               },
+              body: JSON.stringify({
+                 peer_id: id
+              }),
         });
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
