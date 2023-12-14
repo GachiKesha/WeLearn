@@ -1,5 +1,5 @@
 :root {
-  --background-color:  #fff;
+  --background-color:  #24242C;
 }
 * {
   margin: 0;
@@ -42,7 +42,7 @@ h1 {
 form {
   display: flex;
   flex-direction: column;
-  background: #fff;
+  background: #24242C;
   padding: 20px;
   max-width: 500px;
   width: 100%;

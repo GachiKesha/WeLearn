@@ -125,9 +125,9 @@ function LoginPage() {
                         />
                         {passwordError && <p className="error-message">{passwordError}</p>}
                         <label className="checkbox-container">
-                            <p>Remember Me</p>
-                            <input type="checkbox" id="remember" name="remember"/>
+                        <input type="checkbox" id="remember" name="remember"/>
                             <div className="checkmark"></div>
+                            <p>Remember Me</p>
                             <a href="##" className="forgot-link">Forgot Password?</a>
                         </label>
                         <div className="link">

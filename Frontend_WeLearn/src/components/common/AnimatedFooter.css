@@ -17,6 +17,7 @@ svg {
     height: 187px;
     bottom: 0;
     filter: url("#goo");
+    -webkit-filter: url("#goo");
 }
 
 .footer::after {

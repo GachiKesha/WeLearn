@@ -9,15 +9,15 @@
 .post1 {
   display: flex;
   flex-direction: column;
-  background: #fff;
+  background: #24242C;
   padding: 20px;
   max-width: 500px;
   width: 100%;
 }
 
-.container1 img{
-  width: 148px;
-  height: 154px;
+.container1 img {
+  width: 146px;
+  height: 146px;
 }
 
 .post1 input {
@@ -28,10 +28,18 @@
   margin-bottom: 8px;
   font-size: 1rem;
   padding: 0 14px;
+  background-color: #24242C; 
+  color: #ffffff; 
 }
+
+.post1 input::placeholder {
+  color: #828282;
+}
+
+
 .post1 input:focus {
   outline: none;
-  background: #ffffff;
+  color: #828282;
 }
 
 .link {
@@ -47,20 +55,26 @@
   cursor: pointer;
   padding: 15px 0;
   border-radius: 6px;
-  color: #fff;
+  color: #ffffff;
   font-size: 1.25rem;
   font-weight: 600;
   width: 104%;
   background-size: 300% 100%;
-  transition: all .4s ease-in-out;
+  transition: all 0.4s ease-in-out;
 }
 
 .link .login:hover {
   background-position: 100% 0;
-  transition: all .4s ease-in-out;
+  transition: all 0.4s ease-in-out;
 }
+
 .link .login:focus {
   outline: none;
+}
+
+.link p {
+  color: #828282;
+  font-size: 16px;
 }
 
 .link .createAcc {
@@ -73,7 +87,7 @@
 }
 
 .forgot-link {
-  color: #262A7F;
+  color: #666BE4;
   font-size: 16px;
   margin-left: 187px;
   font-weight: 650;
@@ -82,7 +96,6 @@
 .forgot-link:hover {
   text-decoration: underline;
 }
-
 
 .button {
   margin-top: 25px;
@@ -101,14 +114,14 @@
   display: inline-block;
   width: 16px;
   height: 16px;
-  background-color: #262A7F; 
+  background-color: #666BE4;
   margin-right: 10px;
   margin-left: 6px;
-  border: 1px solid #ccc;
+  border: 1px solid #666BE4; 
   border-radius: 3px;
   text-align: center;
   line-height: 16px;
-  color: white;
+  color: #24242C;
 }
 
 input[type="checkbox"] {
@@ -118,9 +131,8 @@ input[type="checkbox"] {
 input[type="checkbox"]:checked + .checkmark::before {
   content: '\2713';
   font-size: 14px;
-  color: white;
+  color: #24242C;
   display: block;
   text-align: center;
   line-height: 16px;
 }
-
