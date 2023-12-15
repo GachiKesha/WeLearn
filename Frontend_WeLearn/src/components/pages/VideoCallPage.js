@@ -9,7 +9,8 @@ import next from './next.png';
 import setting1 from './setting1.png';
 import microOn from './microOn.png';
 import microOff from './microOff.png';
-
+import user1Image from './user1.png';
+import user2Image from './user2.png';
 
 function VideoCallPage() {
     const [MuteMicrophone, setMuteMicrophone] = useState(false);
@@ -153,21 +154,16 @@ function VideoCallPage() {
     <Header />
         <div className={styles.mainContainer}>
             <div className={styles.videosSection}>
-                <video className={styles.videoElement} ref={localVideoRef} autoPlay playsInline muted />
-                <video className={styles.videoElement} ref={remoteVideoRef} autoPlay playsInline />
+                <video className={`${styles.videoElement1} ${CameraOff ? styles.backgroundImage : user1Image }`} ref={localVideoRef} autoPlay playsInline muted />
+                <video className={`${styles.videoElement2} ${CameraOff ? styles.backgroundImage : user2Image}`} ref={remoteVideoRef} autoPlay playsInline />
             </div>
 
             <div className={styles.controlsSection}>
 
                 <div>
-                    <div>Your Peer ID: {peerId}</div>
                     <div>Known Language: {knownLanguage}</div>
                     <div>Desired Language: {desiredLanguage}</div>
                     <div>Name: {username}</div>
-                    <div>
-                        <input value={targetPeerId} onChange={(e) => setTargetPeerId(e.target.value)}/>
-                        <button className={styles.startCallBtn} onClick={callPeer}>Call</button>
-                    </div>
                 </div>
             </div>
         </div>
