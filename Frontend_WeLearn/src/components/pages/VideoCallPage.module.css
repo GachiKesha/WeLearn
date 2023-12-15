@@ -3,7 +3,7 @@
 
 }
 */
-.videoElement {
+.videoElement1, .videoElement2 {
   border-radius: 20px;
   width: 100%;
   max-width: 642px;
@@ -11,6 +11,22 @@
   border: 2px solid #20225f;
   height: 400px;
   object-fit: cover;
+  background-color: #20225f; /* Set a fallback background color */
+  background-size: cover;
+  background-position: center;
+  position: relative; /* To position labels or overlays */
+}
+
+.videoElement1 { background-image: url('user1.png'); }
+
+.videoElement2 { background-image: url('user2.png'); }
+
+
+.videoLabel {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: white;
 }
 
 .mainContainer {
