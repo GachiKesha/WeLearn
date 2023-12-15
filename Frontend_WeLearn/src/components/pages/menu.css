@@ -20,29 +20,28 @@
   margin-left: 15px;
 }
 
-.user-info .user-name p {
+.icon-container .user-name p {
   padding-right: 51px;
   text-align: center;
   line-height: 32px;
 }
 
-.box .user-info {
+.box .icon-container {
   display: flex;
   align-items: center;
-  position: absolute;
-  left: 0;
-  right: 0;
-
+  margin-right: 5px; 
+  margin-left: 5px;  
 }
 
-.box .user-info .user-name {
-  border-radius: 20px;
+.box .icon-container .user-name {
+  border-radius: 10px;
   width: 153px;
   height: 34px;
-  background-color: #7077fe88;
-  margin-right: 15px;
-  margin-left: 10px;
+  margin-right: 5px; 
+  margin-left: 5px;  
+  color: #fff;
 }
+
 
 .link {
   display: flex;
@@ -88,4 +87,15 @@
   top: 39%;
   height: 400px;
   object-fit: cover;
+}
+.icon-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.icon {
+  width: 60px; 
+  height: 60px;
+  margin: 13px;
 }

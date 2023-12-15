@@ -6,7 +6,7 @@ import Support from '../common/Support';
 import cameraOn from './cameraOn.png';
 import cameraOff from './cameraOff.png';
 import next from './next.png';
-import setting1 from './setting1.png';
+import iconImage from './icon.png'; 
 import microOn from './microOn.png';
 import microOff from './microOff.png';
 
@@ -151,6 +151,9 @@ function VideoCallPage() {
 
     return <div>
     <Header />
+        <div className="icon-container">і
+          <img className="icon" src={iconImage} alt="Icon" />
+        </div>
         <div className={styles.mainContainer}>
             <div className={styles.videosSection}>
                 <video className={styles.videoElement} ref={localVideoRef} autoPlay playsInline muted />
@@ -173,9 +176,6 @@ function VideoCallPage() {
         </div>
         <div className={styles.bottomToolbar}>
             <div className={styles.centerContainer}>
-                <a href="#">
-                    <img src={setting1} alt="Setting1 Logo"/>
-                </a>
                 <a href="#" onClick={toggleMicrophone}>
                     {MuteMicrophone ? 
                         (<img src={microOff} alt="Microphone Off" />) 

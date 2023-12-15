@@ -5,22 +5,15 @@ import AnimatedFooter from '../common/AnimatedFooter';
 import Support from '../common/Support';
 import './style.css';
 import './menu.css';
-import settingLogo from './settingLogo.png';
-import userIcon from './userIcon.png';
 import { useNavigate } from 'react-router-dom';
+import iconImage from './icon.png'; 
 
 function MenuPage() {
   const navigate = useNavigate();
   const localVideoRef = useRef();
   const peerRef = useRef();
   const [peerId, setPeerId] = useState(null);
-  const [username, setUsername] = useState(null); // Додайте стан для імені користувача
-
-  useEffect(() => {
-    // Отримайте ім'я користувача з sessionStorage
-    const storedUsername = sessionStorage.getItem('username');
-    setUsername(storedUsername);
-  }, []);
+  const [username, setUsername] = useState('User name'); // Replace 'John Doe' with your default username
 
   const onStart = () => {
     console.log('Start button clicked');
@@ -28,22 +21,48 @@ function MenuPage() {
     navigate('/videocall');
   };
 
+  const initializePeer = async () => {
+    try {
+      const localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+
+      if (localVideoRef.current) {
+        localVideoRef.current.srcObject = localStream;
+      }
+
+      peerRef.current = new Peer();
+
+      peerRef.current.on('open', (id) => {
+        setPeerId(id);
+      });
+
+      peerRef.current.on('call', handleIncomingCall);
+      // Connect to signaling server or perform other setup if needed
+    } catch (error) {
+      console.error('Error accessing media devices:', error);
+    }
+  };
+
+  useEffect(() => {
+    initializePeer();
+
+    return () => {
+      // Additional cleanup or resource release if needed
+    };
+  }, []);
+
+  const handleIncomingCall = (call) => {
+    // Handle incoming call if needed
+  };
 
   return (
     <div>
       <Header />
       <div className="box flex">
-        <div className="user-info">
-          <img className="user-icon" src={userIcon} alt="User Icon" />
-          <div className='setting'>
-        <a href="#">
-          <img src={settingLogo} alt="Setting Logo" />
-        </a>
-      </div>
-          <div className="user-name">
-
+        <div className="icon-container">
+        <div className="user-name">
             <p>{username}</p>
           </div>
+          <img className="icon" src={iconImage} alt="Icon" />
         </div>
       </div>
 
