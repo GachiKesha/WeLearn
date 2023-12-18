@@ -15,16 +15,16 @@ const AnimatedFooter = () => {
     function generateBalls() {
       const gooeyAnimationsNode = gooeyAnimationsRef.current;
 
-      for (let i = 0; i < Math.floor(window.innerWidth / 20); i++) {
+      for (let i = 0; i < Math.floor(window.innerWidth / 60); i++) {
         const ball = document.createElement('div');
         ball.className = 'ball';
 
-        const colors = ['#B0B2CE', ' #262A7F'];
+        const colors = ['#B0B2CE', ' #593567'];
 
         ball.style.bottom = '0px';
         ball.style.left = Math.random() * window.innerWidth - 100 + 'px';
         ball.style.animationDelay = Math.random() * 5 + 's';
-        ball.style.transform = 'translateY(' + Math.random() * 10 + 'px)';
+        ball.style.transform = 'translateY(' + Math.random() * 50 + 'px)';
         ball.style.backgroundColor = colors[i % 2];
 
         gooeyAnimationsNode.appendChild(ball);
@@ -64,7 +64,8 @@ const AnimatedFooter = () => {
       <svg viewBox="0 0 1440 328" width="100vw">
         <defs>
           <clipPath id="wave" clipPathUnits="objectBoundingBox" transform="scale(0.00069444444, 0.00304878048)">
-            <path d="M504.452 27.7002C163.193 -72.9551 25.9595 18.071 0 67.4161V328H1440V27.7002C1270.34 57.14 845.711 128.3556 504.452 27.7002Z"/>
+
+            <path d="M504.452 27.7002C163.193 -42.9551 25.9595 38.071 0 87.4161V328H1440V27.7002C1270.34 57.14 845.711 98.3556 504.452 27.7002Z"/>
           </clipPath>
         </defs>
       </svg>

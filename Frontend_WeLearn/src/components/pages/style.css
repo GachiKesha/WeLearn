@@ -32,7 +32,7 @@ label {
 }
 
 ::placeholder {
-  color: #E0E0E0;
+  color: #ffffff;
   font-size: 15px;
 }
 
@@ -87,7 +87,7 @@ a{
 }
 
 button{
-  background-image: linear-gradient(to right, #7166ea, #764ba2, #7d6bd6, #8E37D7);
+  background-image: linear-gradient(to right, #958EFF, #764ba2, #7d6bd6, #7C009A);
   box-shadow: 0 4px 15px 0 rgba(116, 79, 168, 0.75);
 }
 
