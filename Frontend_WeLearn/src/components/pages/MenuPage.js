@@ -13,7 +13,7 @@ function MenuPage() {
   const localVideoRef = useRef();
   const peerRef = useRef();
   const [peerId, setPeerId] = useState(null);
-  const [username, setUsername] = useState('User name'); // Replace 'John Doe' with your default username
+  const [username, setUsername] = useState(sessionStorage.getItem('username')); // Replace 'John Doe' with your default username
 
   const onStart = () => {
     console.log('Start button clicked');

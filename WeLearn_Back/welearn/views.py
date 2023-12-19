@@ -1,17 +1,14 @@
-from datetime import timedelta, datetime
-
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from django.utils import timezone
 
 from django.shortcuts import get_object_or_404
 from .models import User, Peer
 from rest_framework.authtoken.models import Token
 from .services import PeerService
-from .serializers import UserSerializer, PeerSerializer
+from .serializers import UserSerializer
 
 
 @api_view(['POST'])
@@ -46,19 +43,24 @@ def peer(request):
     if result:
         return Response(result[0], status=result[1])
     else:
-        return Response({"error": "Something went wrong"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response("Something went wrong", status=500)
 
 
 @api_view(['POST'])
-def ping_peer(request, id):
-    try:
-        peer = Peer.objects.get(id=id)
-    except Peer.DoesNotExist:
-        return Response({"detail": "Peer not found"}, status=status.HTTP_404_NOT_FOUND)
-      
-    peer.last_time_pinged = timezone.now()
-    peer.save()
-    return Response({"detail": "Peer pinged successfully"}, status=status.HTTP_200_OK)
+def ping_peer(request, peer_id):
+    if request.data.get('delete'):
+        result = PeerService.delete_peer(peer_id)
+        if result:
+            return Response(result[0], status=result[1])
+        else:
+            return Response("Something went wrong", status=500)
+
+    else:
+        result = PeerService.ping_peer(peer_id)
+        if result:
+            return Response(result[0], status=result[1])
+        else:
+            return Response("Something went wrong", status=500)
 
 
 @api_view(['GET'])
