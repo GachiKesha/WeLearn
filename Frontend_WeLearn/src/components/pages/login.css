@@ -28,8 +28,8 @@
   margin-bottom: 8px;
   font-size: 1rem;
   padding: 0 14px;
-  background-color: #24242C; 
-  color: #ffffff; 
+  background-color: #24242C;
+  color: #ffffff;
 }
 
 .post1 input::placeholder {
@@ -39,7 +39,7 @@
 
 .post1 input:focus {
   outline: none;
-  color: #828282;
+  color: #ffffff;
 }
 
 .link {
@@ -89,8 +89,7 @@
 .forgot-link {
   color: #666BE4;
   font-size: 16px;
-  margin-left: 187px;
-  font-weight: 650;
+  margin-left: 204px;
 }
 
 .forgot-link:hover {
@@ -115,9 +114,9 @@
   width: 16px;
   height: 16px;
   background-color: #666BE4;
-  margin-right: 10px;
-  margin-left: 6px;
-  border: 1px solid #666BE4; 
+  margin-right: 14px;
+  margin-left: 1px;
+  border: 1px solid #666BE4;
   border-radius: 3px;
   text-align: center;
   line-height: 16px;
@@ -128,7 +127,7 @@ input[type="checkbox"] {
   display: none;
 }
 
-input[type="checkbox"]:checked + .checkmark::before {
+input[type="checkbox"]:checked+.checkmark::before {
   content: '\2713';
   font-size: 14px;
   color: #24242C;

@@ -19,13 +19,12 @@ const Header = () => {
         rel="stylesheet"
       />
       <h1 className={styles.h1Container}>
-        <Link to="/">
-          <img src={logo} alt="WeLearn Logo" className={styles.logo} />
-        </Link>
+        
         {isAuthenticated ? (
-          <Link to="/menu">WeLearn</Link>
+          
+          <Link to="/menu"><img src={logo} alt="WeLearn Logo" className={styles.logo} />WeLearn</Link>
         ) : (
-          <Link to="/">WeLearn</Link>
+          <Link to="/"><img src={logo} alt="WeLearn Logo" className={styles.logo} />WeLearn</Link>
         )}
       </h1>
     </div>
