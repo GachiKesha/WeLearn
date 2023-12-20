@@ -2,12 +2,12 @@ from datetime import datetime, timedelta
 from django.utils import timezone
 from .models import Peer
 from .serializers import PeerSerializer
+from rest_framework.authtoken.models import Token
 
 
 class PeerService:
     @classmethod
     def find_or_queue_peer(cls, request):
-        print(request.data)
         cls.delete_peer(request.data.get('previous'))
         existing_peer = Peer.objects.filter(
             user__languages__known_language=request.user.languages.desired_language,
@@ -17,12 +17,8 @@ class PeerService:
         ).first()
 
         if existing_peer:
-            print('existing peer:')
-            print(existing_peer.peer_id, existing_peer.target_peer_id)
             existing_peer.target_peer_id = request.data.get('peer_id')
             existing_peer.save()
-            print('saved existing peer:')
-            print(existing_peer.peer_id, existing_peer.target_peer_id)
             return cls.update_or_create_peer(request.user, request.data, existing_peer=existing_peer)
 
         return cls.update_or_create_peer(request.user, request.data)
@@ -38,7 +34,7 @@ class PeerService:
 
         if existing_peer:
             existing_peer_data = PeerSerializer(existing_peer).data
-            existing_peer_data['username'] = existing_peer.user.username
+            existing_peer_data['token'] = Token.objects.filter(user=user).first().key
         else:
             existing_peer_data = None
         if peer_serializer.is_valid():
