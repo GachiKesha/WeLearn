@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import Peer from 'peerjs';
 import Header from '../common/Header';
 import AnimatedFooter from '../common/AnimatedFooter';
 import Support from '../common/Support';
@@ -11,8 +12,8 @@ function MenuPage() {
   const navigate = useNavigate();
   const localVideoRef = useRef();
   const peerRef = useRef();
-  const [stream, setStream] = useState(null);
-  const [username, setUsername] = useState('User name'); // Replace 'John Doe' with your default username
+  const [peerId, setPeerId] = useState(null);
+  const [username, setUsername] = useState(sessionStorage.getItem('username')); // Replace 'John Doe' with your default username
 
   const onStart = () => {
     console.log('Start button clicked');
@@ -20,31 +21,38 @@ function MenuPage() {
     navigate('/videocall');
   };
 
-  useEffect(() => {
-    const initializeCamera = async () => {
-      try {
-        const userMediaStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        setStream(userMediaStream);
+  const initializePeer = async () => {
+    try {
+      const localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
 
-        if (localVideoRef.current) {
-          localVideoRef.current.srcObject = userMediaStream;
-        }
-      } catch (error) {
-        console.error('Error accessing media devices:', error);
+      if (localVideoRef.current) {
+        localVideoRef.current.srcObject = localStream;
       }
-    };
 
-    initializeCamera();
+      peerRef.current = new Peer();
+
+      peerRef.current.on('open', (id) => {
+        setPeerId(id);
+      });
+
+      peerRef.current.on('call', handleIncomingCall);
+      // Connect to signaling server or perform other setup if needed
+    } catch (error) {
+      console.error('Error accessing media devices:', error);
+    }
+  };
+
+  useEffect(() => {
+    initializePeer();
 
     return () => {
-      if (stream) {
-        stream.getTracks().forEach((track) => {
-          track.stop();
-        });
-      }
+      // Additional cleanup or resource release if needed
     };
   }, []);
 
+  const handleIncomingCall = (call) => {
+    // Handle incoming call if needed
+  };
 
   return (
     <div>
@@ -58,7 +66,7 @@ function MenuPage() {
         </div>
       </div>
 
-      <div className="mlink">
+      <div className="link">
         <button type="button" className="start1" onClick={onStart}>
           ▶
         </button>

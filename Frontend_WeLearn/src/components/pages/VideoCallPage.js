@@ -15,9 +15,11 @@ import user2Image from './user2.png';
 function VideoCallPage() {
     const [MuteMicrophone, setMuteMicrophone] = useState(false);
     const [CameraOff, setCameraOff] = useState(true);
+    const [isUserActive, setIsUserActive] = useState('');
 
-    let [peerId, setPeerId] = useState('');
+    let [peerId, setPeerId] = useState(null);
     let [targetPeerId, setTargetPeerId] = useState('');
+    let previous = null;
 
     const localVideoRef = useRef(null);
     const remoteVideoRef = useRef(null);
@@ -94,30 +96,73 @@ function VideoCallPage() {
                         'Authorization': `Token ${token}`,
                     },
                     body: JSON.stringify({
-                        peer_id: id
-
+                        peer_id: id,
+                        previous: previous
                     }),
                 });
-
+                previous = id;
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const responseData = await response.json();
-                console.log('User data sent successfully:', responseData);
                 if(response.status==200){
-                    console.log('Calling to:', responseData.peer_id);
+                    console.log(responseData.peer_id);
                     setTargetPeerId(responseData.peer_id);
-                    console.log('logs:', targetPeerId);
                 }
                 if(response.status==201){
-                    console.log('Waiting for call...')
                     peerRef.current.on('call', handleIncomingCall);
                 }
+                setIsUserActive(true);
             } catch (error) {
                 console.error('Data sending error:', error);
             }
         });
     }
+
+    const fetchInactiveUser = async (_delete) => {
+        try {
+            await fetch(`http://localhost:8000/ping_peer/${peerRef.current?.id}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Token ${sessionStorage.getItem('token')}`,
+                },
+                body: JSON.stringify({
+                    delete: _delete
+                }),
+            });
+        } catch (error) {
+            console.error('Error sending PeerID to backend:', error);
+        }
+    };
+
+    useEffect(() => {
+        const checkActivity = setInterval(() => {
+            if (isUserActive) {
+                fetchInactiveUser(false);
+            }
+        }, 6000);
+
+        const handleBeforeUnload = () => {
+            console.log('1-')
+            //fetchInactiveUser(true);
+            console.log('1--')
+            //clearInterval(checkActivity);
+            console.log('1---')
+            //setIsUserActive(false);
+            console.log('1----')
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        window.addEventListener('unload', handleBeforeUnload);
+
+        return () => {
+            clearInterval(checkActivity);
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+            window.removeEventListener('unload', handleBeforeUnload);
+            fetchInactiveUser(true);
+        };
+    }, [isUserActive]);
 
     useEffect(() => {
         initializePeer();
@@ -138,14 +183,13 @@ function VideoCallPage() {
     
             if (remoteVideoRef.current) {
                 remoteVideoRef.current.srcObject = null;
-
             }
         };
-
     }, []);
 
     useEffect(() => {
         if (targetPeerId) {
+            console.log('sucecs');
             callPeer();
         }
     }, [targetPeerId]);

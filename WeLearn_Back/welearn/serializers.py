@@ -29,7 +29,7 @@ class UserSerializer(serializers.ModelSerializer):
 class PeerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Peer
-        fields = ['id', 'peer_id']
+        fields = ['id', 'peer_id', 'last_time_pinged', 'target_peer_id']
         read_only_fields = ['user']
 
     def create(self, validated_data):

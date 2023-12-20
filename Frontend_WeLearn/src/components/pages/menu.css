@@ -43,14 +43,14 @@
 }
 
 
-.mlink {
+.link {
   display: flex;
   flex-direction: column;
   text-align: center;
   align-items: center;
 }
 
-.mlink .start1 {
+.link .start1 {
   border: none;
   outline: none;
   cursor: pointer;
@@ -66,12 +66,12 @@
   transition: all .4s ease-in-out;
 }
 
-.mlink .start1:hover {
+.link .start1:hover {
   background-position: 100% 0;
   transition: all .4s ease-in-out;
 }
 
-.mlink .start1:focus {
+.link .start1:focus {
   outline: none;
 }
 
