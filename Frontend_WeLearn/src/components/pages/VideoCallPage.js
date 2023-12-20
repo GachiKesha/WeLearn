@@ -1,17 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./VideoCallPage.module.css";
 import Peer from "peerjs";
-import Header from '../common/Header';
-import AnimatedFooter from '../common/AnimatedFooter';
-import Support from '../common/Support';
-import cameraOn from './cameraOn.png';
-import cameraOff from './cameraOff.png';
-import next from './next.png';
-import iconImage from './icon.png'; 
-import microOn from './microOn.png';
-import microOff from './microOff.png';
-import user1Image from './user1.png';
-import user2Image from './user2.png';
+import Header from "../common/Header";
+import AnimatedFooter from "../common/AnimatedFooter";
+import Support from "../common/Support";
+import cameraOn from "./cameraOn.png";
+import cameraOff from "./cameraOff.png";
+import next from "./next.png";
+import iconImage from "./icon.png";
+import microOn from "./microOn.png";
+import microOff from "./microOff.png";
+import user1Image from "./user1.png";
+import user2Image from "./user2.png";
 
 function VideoCallPage() {
   const [MuteMicrophone, setMuteMicrophone] = useState(false);
@@ -229,37 +229,39 @@ function VideoCallPage() {
           />
         </div>
 
-            <div className={styles.controlsSection}>
-
-            <div>
+        <div className={styles.controlsSection}>
+          <div>
             {/*  <div>Known Language: {knownLanguage}</div>
             <div>Desired Language: {desiredLanguage}</div> */}
             <div>Username: {username}</div>
           </div>
-            </div>
         </div>
-        <div className={styles.bottomToolbar}>
-            <div className={styles.centerContainer}>
-                <a href="#" onClick={toggleMicrophone}>
-                    {MuteMicrophone ? 
-                        (<img src={microOff} alt="Microphone Off" />) 
-                        : (<img src={microOn} alt="Microphone On"/>)
-                    }
-                </a>
-                <a href="#" onClick={toggleCamera}>
-                    {CameraOff ? 
-                        (<img src={cameraOn} alt="Camera On" />) 
-                        : (<img src={cameraOff} alt="Camera Off"/>)
-                    }
-                </a>
-                <a href="#" onClick={initializePeer}>
-                    <img src={next} alt="Next Logo" />
-                </a>
-            </div>
+      </div>
+      <div className={styles.bottomToolbar}>
+        <div className={styles.centerContainer}>
+          <a href="#" onClick={toggleMicrophone}>
+            {MuteMicrophone ? (
+              <img src={microOff} alt="Microphone Off" />
+            ) : (
+              <img src={microOn} alt="Microphone On" />
+            )}
+          </a>
+          <a href="#" onClick={toggleCamera}>
+            {CameraOff ? (
+              <img src={cameraOn} alt="Camera On" />
+            ) : (
+              <img src={cameraOff} alt="Camera Off" />
+            )}
+          </a>
+          <a href="#" onClick={initializePeer}>
+            <img src={next} alt="Next Logo" />
+          </a>
         </div>
-        <Support />
-        <AnimatedFooter />
-    </div>;
+      </div>
+      <Support />
+      <AnimatedFooter />
+    </div>
+  );
 }
 
 export default VideoCallPage;
