@@ -21,27 +21,25 @@
 }
 
 .icon-container .user-name p {
-  padding-right: 51px;
   text-align: center;
   line-height: 32px;
+  font-size: 25px;
+  font-weight: 600;
 }
 
 .box .icon-container {
   display: flex;
   align-items: center;
-  margin-right: 5px; 
-  margin-left: 5px;  
+  margin-right: 5px;
+  margin-left: 5px;
 }
 
 .box .icon-container .user-name {
   border-radius: 10px;
-  width: 153px;
-  height: 34px;
-  margin-right: 5px; 
-  margin-left: 5px;  
+  margin-right: 5px;
+  margin-left: 5px;
   color: #fff;
 }
-
 
 .link {
   display: flex;
@@ -63,18 +61,17 @@
   height: 111px;
   margin-top: 24px;
   background-size: 300% 100%;
-  transition: all .4s ease-in-out;
+  transition: all 0.4s ease-in-out;
 }
 
 .link .start1:hover {
   background-position: 100% 0;
-  transition: all .4s ease-in-out;
+  transition: all 0.4s ease-in-out;
 }
 
 .link .start1:focus {
   outline: none;
 }
-
 
 .videoElement {
   border-radius: 20px;
@@ -95,7 +92,7 @@
 }
 
 .icon {
-  width: 60px; 
+  width: 60px;
   height: 60px;
   margin: 13px;
 }
