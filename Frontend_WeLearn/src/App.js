@@ -4,7 +4,6 @@ import LoginPage from './components/pages/LoginPage';
 import RegistrationPage from './components/pages/RegistrationPage';
 import MenuPage from './components/pages/MenuPage';
 import VideoCallPage from './components/pages/VideoCallPage';
-import StartPage from './components/pages/StartPage';
 
 
 const App = () => {
@@ -15,7 +14,6 @@ const App = () => {
         <Route path="/registration" element={<RegistrationPage />} />
         <Route path="/menu" element={<MenuPage />} />
         <Route path="/videocall" element={<VideoCallPage />} />
-        <Route path="/start" element={<StartPage />} />
       </Routes>
     </Router>
   );

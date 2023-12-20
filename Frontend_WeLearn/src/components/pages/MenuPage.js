@@ -6,7 +6,9 @@ import Support from '../common/Support';
 import './style.css';
 import './menu.css';
 import { useNavigate } from 'react-router-dom';
-import iconImage from './icon.png'; 
+import iconImage from './icon.png';
+import logo1 from './logo1.png';
+import logo2 from './logo2.png';
 
 function MenuPage() {
   const navigate = useNavigate();
@@ -59,7 +61,7 @@ function MenuPage() {
       <Header />
       <div className="box flex">
         <div className="icon-container">
-        <div className="user-name">
+          <div className="user-name">
             <p>{username}</p>
           </div>
           <img className="icon" src={iconImage} alt="Icon" />
@@ -68,13 +70,22 @@ function MenuPage() {
 
       <div className="link">
         <button type="button" className="start1" onClick={onStart}>
-          ▶
+          Start
         </button>
       </div>
 
       <video ref={localVideoRef} autoPlay playsInline muted className="videoElement" />
       <Support />
-    </div>
+      <AnimatedFooter />
+      <div className="image-container">
+        <div className="top-right">
+          <img src={logo1} alt="logo1" />
+        </div>
+        <div className="bottom-left">
+          <img src={logo2} alt="logo2" />
+        </div>
+      </div>
+    </div >
   );
 }
 

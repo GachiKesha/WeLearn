@@ -27,13 +27,13 @@ html {
 
 label {
   font-weight: normal;
-  color: #A1A1A1;
+  color: #cdcdcd;
   font-size: smaller;
 }
 
 ::placeholder {
   color: #ffffff;
-  font-size: 15px;
+  font-size: 14px;
 }
 
 a{
@@ -63,10 +63,8 @@ a{
 }
 
 .error-message {
-  font-size: 16px;
-  color: red;
-  font-weight: 500;
-
+  font-size: 14px;
+  color: #ff007f;
 }
 .support-link .support {
   color: #7076FE;
@@ -87,8 +85,8 @@ a{
 }
 
 button{
-  background-image: linear-gradient(to right, #958EFF, #764ba2, #7d6bd6, #7C009A);
-  box-shadow: 0 4px 15px 0 rgba(116, 79, 168, 0.75);
+  background-image: linear-gradient(to right, #958EFF, #7C009A, #764ba2, #7d6bd6, #7C009A);
+  height: 45px;
 }
 
 
