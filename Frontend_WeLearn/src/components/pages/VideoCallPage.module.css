@@ -1,13 +1,13 @@
-
 /*.startCallBtn {
 
 }
 */
-.videoElement1, .videoElement2 {
+.videoElement1,
+.videoElement2 {
   border-radius: 20px;
   width: 100%;
   max-width: 642px;
-  margin: 0 18px; 
+  margin: 0 18px;
   border: 2px solid #20225f;
   height: 400px;
   object-fit: cover;
@@ -17,10 +17,13 @@
   position: relative; /* To position labels or overlays */
 }
 
-.videoElement1 { background-image: url('user1.png'); }
+.videoElement1 {
+  background-image: url("user1.png");
+}
 
-.videoElement2 { background-image: url('user2.png'); }
-
+.videoElement2 {
+  background-image: url("user2.png");
+}
 
 .videoLabel {
   position: absolute;
@@ -49,6 +52,8 @@
   margin-top: 10px;
   justify-content: center;
   display: flex;
+  font-weight: 600;
+  color: white;
 }
 
 .bottomToolbar {
@@ -74,7 +79,7 @@
 
 .centerContainer img {
   width: 60px;
-  height: 60px; 
+  height: 60px;
 }
 
 .icon-container {
@@ -84,7 +89,7 @@
 }
 
 .icon {
-  width: 60px; 
+  width: 60px;
   height: 60px;
   margin: 13px;
 }
