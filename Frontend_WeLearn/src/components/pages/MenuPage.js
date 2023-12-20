@@ -58,7 +58,7 @@ function MenuPage() {
         </div>
       </div>
 
-      <div className="link">
+      <div className="mlink">
         <button type="button" className="start1" onClick={onStart}>
           ▶
         </button>

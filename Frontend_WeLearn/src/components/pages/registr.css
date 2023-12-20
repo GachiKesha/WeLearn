@@ -1,5 +1,4 @@
 .container2 {
-  padding: 0 15px;
   min-height: 60vh;
   flex-direction: column;
   background-color: var(--background-color);
@@ -8,23 +7,22 @@
 .post2 {
   display: flex;
   flex-direction: column;
-  background: #24242C;
-  max-width: 400px;
+  max-width: 433px;
   width: 100%;
-  height: 486px;
+  height: 460px;
 }
 
 .container2 img {
-  width: 140px;
-  height: 140px;
+  width: 120px;
+  height: 121px;
 }
 
 .post2 input {
-  height: 55px;
+  height: 45px;
   width: 100%;
-  border: 1px solid #828282;
-  border-radius: 6px;
-  margin-bottom: 8px;
+  border: 1px solid #ffffff;
+  border-radius: 5px;
+  margin-bottom: 5px;
   font-size: 1rem;
   padding: 0 14px;
   background-color: #24242C;
@@ -42,11 +40,10 @@
 
 .post2 select {
   font-family: 'Nunito Sans', sans-serif;
-  height: 55px;
+  height: 45px;
   width: 100%;
-  border: 1px solid #828282;
-  border-radius: 6px;
-  margin-bottom: 20px;
+  border: 1px solid #ffffff;
+  border-radius: 5px;
   font-size: 1rem;
   padding: 0 14px;
   margin-bottom: 9px;
@@ -63,7 +60,7 @@
 }
 
 .post2 select:focus {
-  border: 1.5px solid #422072;
+  border: 2px solid #7d6bd6;
   background-color: #24242C;
 }
 
@@ -78,10 +75,10 @@
   border: none;
   outline: none;
   cursor: pointer;
-  padding: 15px 0;
-  border-radius: 6px;
+  border-radius: 5px;
+  margin-top: 7px;
   color: #fff;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 600;
   width: 100%;
   background-size: 300% 100%;
@@ -97,9 +94,4 @@
 
 .link1 .confirm:focus {
   outline: none;
-}
-
-.link1 button {
-  background-image: linear-gradient(to right, #7166ea, #764ba2, #7d6bd6, #8E37D7) !important;
-  box-shadow: 0 4px 15px 0 rgba(116, 79, 168, 0.75);
 }

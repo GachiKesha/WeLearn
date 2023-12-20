@@ -1,5 +1,4 @@
 .container1 {
-  padding: 0px 17px;
   min-height: 70vh;
   justify-content: center;
   flex-direction: column;
@@ -11,21 +10,21 @@
   flex-direction: column;
   background: #24242C;
   padding: 20px;
-  max-width: 500px;
+  max-width: 444px;
   width: 100%;
 }
 
 .container1 img {
-  width: 146px;
-  height: 146px;
+  width: 165px;
+  height: 166px;
 }
 
 .post1 input {
-  height: 55px;
+  height: 45px;
   width: 100%;
   border: 1px solid #DED2D9;
-  border-radius: 6px;
-  margin-bottom: 8px;
+  border-radius: 5px;
+  margin-bottom: 5px;
   font-size: 1rem;
   padding: 0 14px;
   background-color: #24242C;
@@ -46,19 +45,19 @@
   display: flex;
   flex-direction: column;
   text-align: center;
-  gap: 15px;
+  align-items: center;
+  gap: 10px;
 }
 
 .link .login {
   border: none;
   outline: none;
   cursor: pointer;
-  padding: 15px 0;
-  border-radius: 6px;
+  border-radius: 5px;
   color: #ffffff;
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   font-weight: 600;
-  width: 104%;
+  width: 100%;
   background-size: 300% 100%;
   transition: all 0.4s ease-in-out;
 }
@@ -88,8 +87,8 @@
 
 .forgot-link {
   color: #666BE4;
-  font-size: 16px;
-  margin-left: 204px;
+  font-size: 15px;
+  margin-left: 157px;
 }
 
 .forgot-link:hover {
@@ -105,7 +104,7 @@
 .checkbox-container {
   display: flex;
   align-items: center;
-  margin: 2px 0 5px;
+  margin: 2px 0 7px;
   font-size: 15px;
 }
 
