@@ -23,6 +23,17 @@ function MenuPage() {
     navigate('/videocall');
   };
 
+  const onLogout = () => {
+    console.log('Logout button clicked');
+    // redirect to /loginPage
+    sessionStorage.removeItem('username');
+    sessionStorage.removeItem('desiredLanguage');
+    sessionStorage.removeItem('knownLanguage');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('isAuthenticated');
+    navigate('/');
+  };
+
   const initializePeer = async () => {
     try {
       const localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -71,6 +82,12 @@ function MenuPage() {
       <div className="link">
         <button type="button" className="start1" onClick={onStart}>
           Start
+        </button>
+      </div>
+
+      <div className="link">
+        <button type="button" className="logout1" onClick={onLogout}>
+          Logout
         </button>
       </div>
 
