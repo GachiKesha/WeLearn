@@ -36,10 +36,16 @@ class PeerService:
         else:  # Create new peer
             peer_serializer = PeerSerializer(instance=user_peer, data=serializer_data, partial=True)
 
+        if existing_peer:
+            existing_peer_data = PeerSerializer(existing_peer).data
+            existing_peer_data['username'] = existing_peer.user.username
+        else:
+            existing_peer_data = None
         if peer_serializer.is_valid():
             peer_serializer.save(user=user, last_time_pinged=timezone.now())
+
             return cls.success_response(True if existing_peer is not None else False,
-                                        existing_peer_data=PeerSerializer(existing_peer).data if existing_peer else None)
+                                        existing_peer_data=existing_peer_data if existing_peer else None)
         else:
             return peer_serializer.errors, 400
 
