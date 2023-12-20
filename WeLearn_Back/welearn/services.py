@@ -8,7 +8,11 @@ from rest_framework.authtoken.models import Token
 class PeerService:
     @classmethod
     def find_or_queue_peer(cls, request):
-        cls.delete_peer(request.data.get('previous'))
+        connected_peer = Peer.objects.filter(target_peer_id=request.data['previous'] or request.data['peer_id']).first()
+        if connected_peer:
+            connected_peer.target_peer_id = None
+            connected_peer.save()
+
         existing_peer = Peer.objects.filter(
             user__languages__known_language=request.user.languages.desired_language,
             user__languages__desired_language=request.user.languages.known_language,
@@ -64,16 +68,13 @@ class PeerService:
 
     @classmethod
     def delete_peer(cls, peer_id):
-        print('deleting...')
         peer = Peer.objects.filter(peer_id=peer_id).first()
         connected_peer = Peer.objects.filter(target_peer_id=peer_id).first()
 
         if peer:
             if connected_peer:
-                print('changing ' + str(connected_peer.target_peer_id))
                 connected_peer.target_peer_id = None
                 connected_peer.save()
-            print('deleting ' + str(peer.peer_id))
             peer.delete()
             return "Peer deleted successfully", 205
         else:
