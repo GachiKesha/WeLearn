@@ -1,5 +1,5 @@
 .box {
-  min-height: 57vh;
+  min-height: 55vh;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -29,16 +29,16 @@
 .box .icon-container {
   display: flex;
   align-items: center;
-  margin-right: 5px; 
-  margin-left: 5px;  
+  margin-right: 5px;
+  margin-left: 5px;
 }
 
 .box .icon-container .user-name {
   border-radius: 10px;
   width: 153px;
   height: 34px;
-  margin-right: 5px; 
-  margin-left: 5px;  
+  margin-right: 5px;
+  margin-left: 5px;
   color: #fff;
 }
 
@@ -54,13 +54,12 @@
   border: none;
   outline: none;
   cursor: pointer;
-  padding: 20px 36px 75px;
-  border-radius: 100%;
   color: #fff;
-  font-size: 60px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 20px;
   font-weight: 600;
-  width: 111px;
-  height: 111px;
+  border-radius: 60px;
+  width: 144px;
   margin-top: 24px;
   background-size: 300% 100%;
   transition: all .4s ease-in-out;
@@ -82,12 +81,12 @@
   max-width: 642px;
   position: absolute;
   left: 50%;
-  border: 2px solid #20225f;
   transform: translate(-50%, -50%);
   top: 39%;
   height: 400px;
   object-fit: cover;
 }
+
 .icon-container {
   position: absolute;
   top: 10px;
@@ -95,7 +94,26 @@
 }
 
 .icon {
-  width: 60px; 
+  width: 60px;
   height: 60px;
   margin: 13px;
+}
+
+.image-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px; /* Adjust this value to set the desired space between images */
+}
+
+.top-right,
+.bottom-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.image-container img {
+  height: 276px;
+  margin-top: -106px;
+  margin-left: 286px;
+  margin-right: 210px; /* Adjust this value to set the desired space between images */
 }

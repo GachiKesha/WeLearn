@@ -49,6 +49,7 @@ const AnimatedFooter = () => {
     };
   }, []);
 
+
   return (
     <animated.div className={`${styles.footer} footer`} style={props}>
       <div className={`${styles.gooeyAnimations} gooey-animations`} ref={gooeyAnimationsRef}></div>

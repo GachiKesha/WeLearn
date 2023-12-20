@@ -2,6 +2,7 @@ import {useEffect, useRef, useState} from "react";
 import styles from './VideoCallPage.module.css';
 import Peer from "peerjs";
 import Header from '../common/Header';
+import AnimatedFooter from '../common/AnimatedFooter';
 import Support from '../common/Support';
 import cameraOn from './cameraOn.png';
 import cameraOff from './cameraOff.png';
@@ -233,8 +234,8 @@ function VideoCallPage() {
                 </a>
             </div>
         </div>
-        
         <Support />
+        <AnimatedFooter />
     </div>;
 }
 
