@@ -93,6 +93,7 @@ function MenuPage() {
 
       <video ref={localVideoRef} autoPlay playsInline muted className="videoElement" />
       <Support />
+    <div className="footer-container">
       <AnimatedFooter />
       <div className="image-container">
         <div className="top-right">
@@ -103,6 +104,7 @@ function MenuPage() {
         </div>
       </div>
     </div >
+   </div>
   );
 }
 

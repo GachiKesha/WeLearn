@@ -109,8 +109,18 @@
 }
 
 .image-container img {
-  height: 276px;
-  margin-top: -106px;
-  margin-left: 286px;
-  margin-right: 210px;
+  max-width: 100%; 
+  height: auto; 
+  max-height: 276px; 
+  margin-top: -330px;
+  margin-left: 184px; 
+  margin-right: 150px;
+}
+
+
+.footer-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
