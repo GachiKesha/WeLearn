@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import iconImage from "./icon.png";
 import logo1 from "./logo1.png";
 import logo2 from "./logo2.png";
+import logout from "./logout.png";
 
 function MenuPage() {
   const navigate = useNavigate();
@@ -23,7 +24,9 @@ function MenuPage() {
     navigate("/videocall");
   };
 
-  const onLogout = () => {
+  const onLogout = (e) => {
+    e.preventDefault();
+    console.log("Logout link clicked");
     console.log("Logout button clicked");
     // redirect to /loginPage
     sessionStorage.removeItem("username");
@@ -86,12 +89,13 @@ function MenuPage() {
         <button type="button" className="start1" onClick={onStart}>
           Start
         </button>
-      </div>
-
-      <div className="link">
-        <button type="button" className="logout1" onClick={onLogout}>
-          Logout
-        </button>
+        <a
+          href="#"
+          className="logout1 styled-button"
+          onClick={onLogout}
+          title="Click to Logout">
+          <img src={logout} alt="Logout" />
+        </a>
       </div>
 
       <video
@@ -102,18 +106,18 @@ function MenuPage() {
         className="videoElement"
       />
       <Support />
-    <div className="footer-container">
-      <AnimatedFooter />
-      <div className="image-container">
-        <div className="top-right">
-          <img src={logo1} alt="logo1" />
+      <div className="footer-container">
+        <AnimatedFooter />
+        <div className="image-container">
+          <div className="top-right">
+            <img src={logo1} alt="logo1" />
+          </div>
+          <div className="bottom-left">
+            <img src={logo2} alt="logo2" />
+          </div>
         </div>
-        <div className="bottom-left">
-          <img src={logo2} alt="logo2" />
-        </div>
-      </div>
-    </div >
-  </div>
+      </div >
+    </div>
   );
 }
 

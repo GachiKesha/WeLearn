@@ -35,7 +35,7 @@
 
 .post2 input:focus {
   outline: none;
-  color: #828282;
+  color: #ffffff;
 }
 
 .post2 select {
@@ -94,4 +94,8 @@
 
 .link1 .confirm:focus {
   outline: none;
+}
+.link img {
+  width: 60px;
+  height: 60px;
 }
