@@ -1,5 +1,5 @@
 :root {
-  --background-color:  #fff;
+  --background-color: #24242C;
 }
 * {
   margin: 0;
@@ -11,6 +11,8 @@
 html {
   scroll-behavior: smooth;
   font-family: 'Nunito Sans', sans-serif;
+  background-color: #24242C
+
 }
 .page {
   justify-content: center ;
@@ -25,13 +27,13 @@ html {
 
 label {
   font-weight: normal;
-  color: #A1A1A1;
-
+  color: #cdcdcd;
+  font-size: smaller;
 }
 
 ::placeholder {
-  color: #E0E0E0;
-  font-size: 15px;
+  color: #ffffff;
+  font-size: 14px;
 }
 
 a{
@@ -60,6 +62,10 @@ a{
   transform: rotate(170deg);
 }
 
+.error-message {
+  font-size: 14px;
+  color: #ff007f;
+}
 .support-link .support {
   color: #7076FE;
   font-weight: 700;
@@ -67,7 +73,9 @@ a{
   position: fixed;
   bottom: 0;
   right: 0;
-  padding: 10px 10px;
+  padding: 12px 21px;
+  z-index: 9999; 
+  font-size: 22px;
 }
 
 .support-link .support:hover{
@@ -76,11 +84,9 @@ a{
   font-weight: 700;
 }
 
-.button {
-  margin-top: 25px;
-  text-align: center;
-  margin-bottom: 20px;
-  width: 200px;
+button{
+  background-image: linear-gradient(to right, #958EFF, #7C009A, #764ba2, #7d6bd6, #7C009A);
+  height: 45px;
 }
 
 

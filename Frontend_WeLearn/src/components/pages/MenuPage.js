@@ -1,44 +1,116 @@
-import React from 'react';
-import Header from '../common/Header';
-import Support from '../common/Support';
-import './style.css';
-import './menu.css';
-import settingsLogo from './settingLogo.png';
-import userIcon from './userIcon.png';
-import startLogo from './startLogo.png';
+import React, { useEffect, useRef, useState } from "react";
+import Peer from "peerjs";
+import Header from "../common/Header";
+import AnimatedFooter from "../common/AnimatedFooter";
+import Support from "../common/Support";
+import "./style.css";
+import "./menu.css";
+import { useNavigate } from "react-router-dom";
+import iconImage from "./icon.png";
+import logo1 from "./logo1.png";
+import logo2 from "./logo2.png";
 
 function MenuPage() {
-  return (
-    
-    <div>
-    
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
-<link
-  href="https://fonts.googleapis.com/css2?family=Lora&family=Nunito+Sans:ital,opsz,wght@0,6..12,200;0,6..12,300;0,6..12,800;1,6..12,1000&display=swap"
-  rel="stylesheet"
-/>
+  const navigate = useNavigate();
+  const localVideoRef = useRef();
+  const peerRef = useRef();
+  const [peerId, setPeerId] = useState(null);
+  const [username, setUsername] = useState(sessionStorage.getItem("username")); // Replace 'John Doe' with your default username
 
-    
-        <Header />
-        <div className="container flex">
-          <div className="user-info">
-            <img src={userIcon} alt="User Icon" />
-            <div className="user-name">
-              <p>User name</p>
-            </div>
-            <a href="##">
-              <img src={settingsLogo} alt="Settings" />
-            </a>
+  const onStart = () => {
+    console.log("Start button clicked");
+    // redirect to /videocallPage
+    navigate("/videocall");
+  };
+
+  const onLogout = () => {
+    console.log("Logout button clicked");
+    // redirect to /loginPage
+    sessionStorage.removeItem("username");
+    sessionStorage.removeItem("desiredLanguage");
+    sessionStorage.removeItem("knownLanguage");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("isAuthenticated");
+    navigate("/");
+  };
+
+  const initializePeer = async () => {
+    try {
+      const localStream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true,
+      });
+
+      if (localVideoRef.current) {
+        localVideoRef.current.srcObject = localStream;
+      }
+
+      peerRef.current = new Peer();
+
+      peerRef.current.on("open", (id) => {
+        setPeerId(id);
+      });
+
+      peerRef.current.on("call", handleIncomingCall);
+      // Connect to signaling server or perform other setup if needed
+    } catch (error) {
+      console.error("Error accessing media devices:", error);
+    }
+  };
+
+  useEffect(() => {
+    initializePeer();
+
+    return () => {
+      // Additional cleanup or resource release if needed
+    };
+  }, []);
+
+  const handleIncomingCall = (call) => {
+    // Handle incoming call if needed
+  };
+
+  return (
+    <div>
+      <Header />
+      <div className="box flex">
+        <div className="icon-container">
+          <div className="user-name">
+            <p>{username}</p>
           </div>
-          <div className="post">
-            <div className="video-start">
-              <a href="##">
-                <img src={startLogo} alt="Start" />
-              </a>
-            </div>
-          </div>
+          <img className="icon" src={iconImage} alt="Icon" />
         </div>
-        <Support />
+      </div>
+
+      <div className="link">
+        <button type="button" className="start1" onClick={onStart}>
+          Start
+        </button>
+      </div>
+
+      <div className="link">
+        <button type="button" className="logout1" onClick={onLogout}>
+          Logout
+        </button>
+      </div>
+
+      <video
+        ref={localVideoRef}
+        autoPlay
+        playsInline
+        muted
+        className="videoElement"
+      />
+      <Support />
+      <AnimatedFooter />
+      <div className="image-container">
+        <div className="top-right">
+          <img src={logo1} alt="logo1" />
+        </div>
+        <div className="bottom-left">
+          <img src={logo2} alt="logo2" />
+        </div>
+      </div>
     </div>
   );
 }
