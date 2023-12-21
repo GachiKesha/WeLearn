@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from django.shortcuts import get_object_or_404
-from .models import User
+from .models import User, Peer
 from rest_framework.authtoken.models import Token
 from .services import PeerService
 from .serializers import UserSerializer
@@ -63,28 +63,9 @@ def ping_peer(request, peer_id):
             return Response("Something went wrong", status=500)
 
 
-@api_view(['POST', 'GET'])
-def in_call_func(request, peer_id):
-    if request.method == 'POST':
-        result = PeerService.update_peer(peer_id, request.data.get('in_call'))
-        if result:
-            return Response(result[0], status=result[1])
-        else:
-            return Response("Something went wrong", status=500)
-    elif request.method == 'GET':
-        result = PeerService.get_name(peer_id)
-        if result:
-            return Response(result[0], status=result[1])
-        else:
-            return Response("Something went wrong", status=500)
-
-
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def test_token(request):
     print(request.user)
     return Response("passed!")
-
-
-__all__ = ['login', 'signup', 'peer', 'ping_peer', 'test_token', 'in_call_func']
