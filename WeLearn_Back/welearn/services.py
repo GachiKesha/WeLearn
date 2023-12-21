@@ -8,50 +8,57 @@ from rest_framework.authtoken.models import Token
 class PeerService:
     @classmethod
     def find_or_queue_peer(cls, request):
-        connected_peer = Peer.objects.filter(target_peer_id=request.data['previous'] or request.data['peer_id']).first()
-        if connected_peer:
-            connected_peer.target_peer_id = None
-            connected_peer.save()
-
         existing_peer = Peer.objects.filter(
             user__languages__known_language=request.user.languages.desired_language,
             user__languages__desired_language=request.user.languages.known_language,
             last_time_pinged__gte=timezone.now() - timedelta(minutes=1),
-            target_peer_id=None
+            in_call=False
         ).first()
 
         if existing_peer:
-            existing_peer.target_peer_id = request.data.get('peer_id')
-            existing_peer.save()
             return cls.update_or_create_peer(request.user, request.data, existing_peer=existing_peer)
-
-        return cls.update_or_create_peer(request.user, request.data)
+        else:
+            return cls.update_or_create_peer(request.user, request.data)
 
     @classmethod
     def update_or_create_peer(cls, user, serializer_data, existing_peer=None):
         user_peer = Peer.objects.filter(user=user).first()
-        serializer_data['target_peer_id'] = None if not existing_peer else existing_peer.peer_id
         if not user_peer:  # Update existing peer
             peer_serializer = PeerSerializer(data=serializer_data)
         else:  # Create new peer
             peer_serializer = PeerSerializer(instance=user_peer, data=serializer_data, partial=True)
 
         if existing_peer:
-            existing_peer_data = PeerSerializer(existing_peer).data
-            existing_peer_data['username'] = existing_peer.user.username
+            existing_peer_id = existing_peer.peer_id
         else:
-            existing_peer_data = None
+            existing_peer_id = None
         if peer_serializer.is_valid():
             peer_serializer.save(user=user, last_time_pinged=timezone.now())
-
-            return cls.success_response(True if existing_peer is not None else False,
-                                        existing_peer_data=existing_peer_data if existing_peer else None)
+            return cls.success_response(existing_peer is not None, existing_peer_id=existing_peer_id)
         else:
             return peer_serializer.errors, 400
 
     @staticmethod
-    def success_response(in_call, existing_peer_data=None):
-        return existing_peer_data or "You are in the queue for a companion...", 201 if not in_call else 200
+    def success_response(in_call, existing_peer_id=None):
+        return existing_peer_id or "You are in the queue for a companion...", 200 if in_call else 201
+
+    @staticmethod
+    def update_peer(peer_id, in_call):
+        peer = Peer.objects.filter(peer_id=peer_id).first()
+        if peer:
+            peer.in_call = in_call
+            peer.save()
+            return "OK.", 200
+        else:
+            return "No such peer", 404
+
+    @staticmethod
+    def get_name(peer_id):
+        peer = Peer.objects.filter(peer_id=peer_id).first()
+        if peer:
+            return peer.user.username, 200
+        else:
+            return "No such peer", 404
 
     @classmethod
     def check_disconnected_peers(cls):
@@ -66,21 +73,16 @@ class PeerService:
             peer.in_call = False
             peer.save()
 
-    @classmethod
+    @staticmethod
     def delete_peer(cls, peer_id):
         peer = Peer.objects.filter(peer_id=peer_id).first()
-        connected_peer = Peer.objects.filter(target_peer_id=peer_id).first()
-
         if peer:
-            if connected_peer:
-                connected_peer.target_peer_id = None
-                connected_peer.save()
             peer.delete()
             return "Peer deleted successfully", 205
         else:
             return "Peer not found", 404
 
-    @classmethod
+    @staticmethod
     def ping_peer(cls, peer_id):
         peer = Peer.objects.filter(peer_id=peer_id).first()
         if peer:

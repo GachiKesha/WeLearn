@@ -23,7 +23,7 @@ class Peer(models.Model):
     )
     peer_id = models.CharField(max_length=50)
     last_time_pinged = models.DateTimeField(auto_now=True)
-    target_peer_id = models.CharField(max_length=50, null=True, blank=True, default=None)
+    in_call = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.user.username}'s Peer"
