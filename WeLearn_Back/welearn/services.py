@@ -38,7 +38,7 @@ class PeerService:
 
         if existing_peer:
             existing_peer_data = PeerSerializer(existing_peer).data
-            existing_peer_data['token'] = Token.objects.filter(user=user).first().key
+            existing_peer_data['username'] = existing_peer.user.username
         else:
             existing_peer_data = None
         if peer_serializer.is_valid():

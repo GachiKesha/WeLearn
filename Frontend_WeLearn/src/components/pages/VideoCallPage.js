@@ -18,6 +18,8 @@ function VideoCallPage() {
   const [CameraOff, setCameraOff] = useState(true);
   const [isUserActive, setIsUserActive] = useState("");
 
+  const [oppUsername, setOppUsername] = useState("");
+
   let [peerId, setPeerId] = useState(null);
   let [targetPeerId, setTargetPeerId] = useState("");
   let previous = null;
@@ -112,11 +114,24 @@ function VideoCallPage() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const responseData = await response.json();
-        if (response.status == 200) {
+        if (response.status === 200) {
           console.log(responseData.peer_id);
           setTargetPeerId(responseData.peer_id);
+          // Отримайте ім'я користувача за його піром
+          const oppUserResponse = await fetch(
+            `http://localhost:8000/get_user_info/${responseData.peer_id}/`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Token ${token}`,
+              },
+            }
+          );
+          const oppUserData = await oppUserResponse.json();
+          setOppUsername(oppUserData.username);
         }
-        if (response.status == 201) {
+        if (response.status === 201) {
           peerRef.current.on("call", handleIncomingCall);
         }
         setIsUserActive(true);
@@ -228,12 +243,15 @@ function VideoCallPage() {
             playsInline
           />
         </div>
+        {/*  <div>Known Language: {knownLanguage}</div>
+            <div>Desired Language: {desiredLanguage}</div> */}
 
         <div className={styles.controlsSection}>
           <div>
-            {/*  <div>Known Language: {knownLanguage}</div>
-            <div>Desired Language: {desiredLanguage}</div> */}
             <div>Username: {username}</div>
+            <div>Known Language: {knownLanguage}</div>
+            <div>Desired Language: {desiredLanguage}</div>
+            {oppUsername && <div>Opponent: {oppUsername}</div>}
           </div>
         </div>
       </div>
