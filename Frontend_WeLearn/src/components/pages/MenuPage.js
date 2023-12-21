@@ -102,6 +102,7 @@ function MenuPage() {
         className="videoElement"
       />
       <Support />
+    <div className="footer-container">
       <AnimatedFooter />
       <div className="image-container">
         <div className="top-right">
@@ -111,7 +112,8 @@ function MenuPage() {
           <img src={logo2} alt="logo2" />
         </div>
       </div>
-    </div>
+    </div >
+  </div>
   );
 }
 
