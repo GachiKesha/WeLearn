@@ -16,7 +16,7 @@ import user2Image from "./user2.png";
 function VideoCallPage() {
   const [MuteMicrophone, setMuteMicrophone] = useState(false);
   const [CameraOff, setCameraOff] = useState(true);
-  const [isUserActive, setIsUserActive] = useState("");
+  const [isUserActive, setIsUserActive] = useState(false);
 
   const [oppUsername, setOppUsername] = useState("");
 
@@ -117,24 +117,13 @@ function VideoCallPage() {
         if (response.status === 200) {
           console.log(responseData.peer_id);
           setTargetPeerId(responseData.peer_id);
-          // Отримайте ім'я користувача за його піром
-          const oppUserResponse = await fetch(
-            `http://localhost:8000/get_user_info/${responseData.peer_id}/`,
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Token ${token}`,
-              },
-            }
-          );
-          const oppUserData = await oppUserResponse.json();
-          setOppUsername(oppUserData.username);
+          setOppUsername(responseData.username);
+          setIsUserActive(true);
         }
         if (response.status === 201) {
           peerRef.current.on("call", handleIncomingCall);
-        }
-        setIsUserActive(true);
+          setIsUserActive(true);
+        } 
       } catch (error) {
         console.error("Data sending error:", error);
       }
