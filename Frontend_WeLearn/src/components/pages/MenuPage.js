@@ -1,42 +1,45 @@
-import React, { useEffect, useRef, useState } from 'react';
-import Peer from 'peerjs';
-import Header from '../common/Header';
-import AnimatedFooter from '../common/AnimatedFooter';
-import Support from '../common/Support';
-import './style.css';
-import './menu.css';
-import { useNavigate } from 'react-router-dom';
-import iconImage from './icon.png';
-import logo1 from './logo1.png';
-import logo2 from './logo2.png';
+import React, { useEffect, useRef, useState } from "react";
+import Peer from "peerjs";
+import Header from "../common/Header";
+import AnimatedFooter from "../common/AnimatedFooter";
+import Support from "../common/Support";
+import "./style.css";
+import "./menu.css";
+import { useNavigate } from "react-router-dom";
+import iconImage from "./icon.png";
+import logo1 from "./logo1.png";
+import logo2 from "./logo2.png";
 
 function MenuPage() {
   const navigate = useNavigate();
   const localVideoRef = useRef();
   const peerRef = useRef();
   const [peerId, setPeerId] = useState(null);
-  const [username, setUsername] = useState(sessionStorage.getItem('username')); // Replace 'John Doe' with your default username
+  const [username, setUsername] = useState(sessionStorage.getItem("username")); // Replace 'John Doe' with your default username
 
   const onStart = () => {
-    console.log('Start button clicked');
+    console.log("Start button clicked");
     // redirect to /videocallPage
-    navigate('/videocall');
+    navigate("/videocall");
   };
 
   const onLogout = () => {
-    console.log('Logout button clicked');
+    console.log("Logout button clicked");
     // redirect to /loginPage
-    sessionStorage.removeItem('username');
-    sessionStorage.removeItem('desiredLanguage');
-    sessionStorage.removeItem('knownLanguage');
-    sessionStorage.removeItem('token');
-    sessionStorage.removeItem('isAuthenticated');
-    navigate('/');
+    sessionStorage.removeItem("username");
+    sessionStorage.removeItem("desiredLanguage");
+    sessionStorage.removeItem("knownLanguage");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("isAuthenticated");
+    navigate("/");
   };
 
   const initializePeer = async () => {
     try {
-      const localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      const localStream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true,
+      });
 
       if (localVideoRef.current) {
         localVideoRef.current.srcObject = localStream;
@@ -44,14 +47,14 @@ function MenuPage() {
 
       peerRef.current = new Peer();
 
-      peerRef.current.on('open', (id) => {
+      peerRef.current.on("open", (id) => {
         setPeerId(id);
       });
 
-      peerRef.current.on('call', handleIncomingCall);
+      peerRef.current.on("call", handleIncomingCall);
       // Connect to signaling server or perform other setup if needed
     } catch (error) {
-      console.error('Error accessing media devices:', error);
+      console.error("Error accessing media devices:", error);
     }
   };
 
@@ -91,7 +94,13 @@ function MenuPage() {
         </button>
       </div>
 
-      <video ref={localVideoRef} autoPlay playsInline muted className="videoElement" />
+      <video
+        ref={localVideoRef}
+        autoPlay
+        playsInline
+        muted
+        className="videoElement"
+      />
       <Support />
     <div className="footer-container">
       <AnimatedFooter />
@@ -104,7 +113,7 @@ function MenuPage() {
         </div>
       </div>
     </div >
-   </div>
+  </div>
   );
 }
 

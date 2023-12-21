@@ -16,7 +16,9 @@ import user2Image from "./user2.png";
 function VideoCallPage() {
   const [MuteMicrophone, setMuteMicrophone] = useState(false);
   const [CameraOff, setCameraOff] = useState(true);
-  const [isUserActive, setIsUserActive] = useState("");
+  const [isUserActive, setIsUserActive] = useState(false);
+
+  const [oppUsername, setOppUsername] = useState("");
 
   let [peerId, setPeerId] = useState(null);
   let [targetPeerId, setTargetPeerId] = useState("");
@@ -112,14 +114,16 @@ function VideoCallPage() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const responseData = await response.json();
-        if (response.status == 200) {
+        if (response.status === 200) {
           console.log(responseData.peer_id);
           setTargetPeerId(responseData.peer_id);
+          setOppUsername(responseData.username);
+          setIsUserActive(true);
         }
-        if (response.status == 201) {
+        if (response.status === 201) {
           peerRef.current.on("call", handleIncomingCall);
-        }
-        setIsUserActive(true);
+          setIsUserActive(true);
+        } 
       } catch (error) {
         console.error("Data sending error:", error);
       }
@@ -228,12 +232,15 @@ function VideoCallPage() {
             playsInline
           />
         </div>
+        {/*  <div>Known Language: {knownLanguage}</div>
+            <div>Desired Language: {desiredLanguage}</div> */}
 
         <div className={styles.controlsSection}>
           <div>
-            {/*  <div>Known Language: {knownLanguage}</div>
-            <div>Desired Language: {desiredLanguage}</div> */}
             <div>Username: {username}</div>
+            <div>Known Language: {knownLanguage}</div>
+            <div>Desired Language: {desiredLanguage}</div>
+            {oppUsername && <div>Opponent: {oppUsername}</div>}
           </div>
         </div>
       </div>
