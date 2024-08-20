@@ -25,8 +25,9 @@ class Peer(models.Model):
     last_time_pinged = models.DateTimeField(auto_now=True)
     target_peer_id = models.CharField(max_length=50, null=True, blank=True, default=None)
 
-    def __str__(self):
-        return f"{self.user.username}'s Peer"
+    def __str__(self):  
+        return f"{self.user.username}'s Peer\
+            \nid = {self.peer_id}\ntarget id = {self.target_peer_id}"
 
 
 

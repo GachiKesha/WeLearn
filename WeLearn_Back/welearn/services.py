@@ -3,56 +3,79 @@ from django.utils import timezone
 from .models import Peer
 from .serializers import PeerSerializer
 from rest_framework.authtoken.models import Token
+import json
+
+from django.db import connection
 
 
 class PeerService:
+    @staticmethod
+    def log_to_file(message, filename='messages.log'):
+        with open(filename, 'a') as file:
+            file.write(f'{message}\n')
+            
     @classmethod
     def find_or_queue_peer(cls, request):
-        connected_peer = Peer.objects.filter(target_peer_id=request.data['previous'] or request.data['peer_id']).first()
+        """
+        Returns target data if target exist, else puts in queue
+        """
+
+        user = request.user
+        data = request.data
+
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT id, peer_id, user_id, target_peer_id FROM welearn_peer")
+            column_names = [description[0] for description in cursor.description]
+            cls.log_to_file(' | '.join(column_names))
+            for row in cursor.fetchall():
+                cls.log_to_file(f'{row}\n')
+        #cls.log_to_file(f'content - {json.dumps(data)}')
+        
+        connected_peer = Peer.objects.filter(target_peer_id=data['previous']).first() 
+        print(connected_peer)       
+        #cls.log_to_file(f'connected - {json.dumps(PeerSerializer(connected_peer).data, indent=4) if connected_peer else None}')
+        
         if connected_peer:
             connected_peer.target_peer_id = None
-            connected_peer.save()
+            connected_peer.save()    
 
-        existing_peer = Peer.objects.filter(
+        target_peer = Peer.objects.filter(
             user__languages__known_language=request.user.languages.desired_language,
             user__languages__desired_language=request.user.languages.known_language,
             last_time_pinged__gte=timezone.now() - timedelta(minutes=1),
             target_peer_id=None
         ).first()
 
-        if existing_peer:
-            existing_peer.target_peer_id = request.data.get('peer_id')
-            existing_peer.save()
-            return cls.update_or_create_peer(request.user, request.data, existing_peer=existing_peer)
-
-        return cls.update_or_create_peer(request.user, request.data)
-
-    @classmethod
-    def update_or_create_peer(cls, user, serializer_data, existing_peer=None):
+        serializer_data = data
+        if target_peer:
+            target_peer.target_peer_id = data.get('peer_id')
+            serializer_data['target_peer_id'] = target_peer.peer_id
+            target_peer.save()
+        else: 
+            serializer_data['target_peer_id'] = None
+             
         user_peer = Peer.objects.filter(user=user).first()
-        serializer_data['target_peer_id'] = None if not existing_peer else existing_peer.peer_id
-        if not user_peer:  # Update existing peer
-            peer_serializer = PeerSerializer(data=serializer_data)
-        else:  # Create new peer
-            peer_serializer = PeerSerializer(instance=user_peer, data=serializer_data, partial=True)
-
-        if existing_peer:
-            existing_peer_data = PeerSerializer(existing_peer).data
-            existing_peer_data['username'] = existing_peer.user.username
+        #cls.log_to_file(f'user peer = {user_peer}')
+        if not user_peer:  # Create new peer
+            peer_serializer = PeerSerializer(data=serializer_data)            
+        else:  # Update existing peer
+            peer_serializer = PeerSerializer(instance=user_peer, data=serializer_data, partial=True)         
+        
+        if target_peer:
+            return_data = PeerSerializer(target_peer).data
+            return_data['username'] = target_peer.user.username
         else:
-            existing_peer_data = None
+            return_data = "You are in the queue for a companion..."
+
         if peer_serializer.is_valid():
             peer_serializer.save(user=user, last_time_pinged=timezone.now())
-
-            return cls.success_response(True if existing_peer is not None else False,
-                                        existing_peer_data=existing_peer_data if existing_peer else None)
+            
+            #cls.log_to_file(f'user - {json.dumps(peer_serializer.data, indent=4)},\n---------------------------------------\ntarget - {json.dumps(return_data, indent=4)}')
+            return return_data, 200 if target_peer else 201
         else:
+            #cls.log_to_file(f'{peer_serializer.errors}, user = {user}')
             return peer_serializer.errors, 400
-
-    @staticmethod
-    def success_response(in_call, existing_peer_data=None):
-        return existing_peer_data or "You are in the queue for a companion...", 201 if not in_call else 200
-
+      
     @classmethod
     def check_disconnected_peers(cls):
         # Get a list of disconnected peers
@@ -76,7 +99,15 @@ class PeerService:
                 connected_peer.target_peer_id = None
                 connected_peer.save()
             peer.delete()
-            return "Peer deleted successfully", 205
+            """
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT id, peer_id, user_id, target_peer_id FROM welearn_peer")
+                column_names = [description[0] for description in cursor.description]
+                cls.log_to_file(' | '.join(column_names))
+                for row in cursor.fetchall():
+                    cls.log_to_file(f'{row}\n')
+            """
+            return None, 205
         else:
             return "Peer not found", 404
 
@@ -86,7 +117,7 @@ class PeerService:
         if peer:
             peer.last_time_pinged = timezone.now()
             peer.save()
-            return "Peer pinged successfully", 200
+            return PeerSerializer(peer).data, 200
         else:
             return "Peer not found", 404
 

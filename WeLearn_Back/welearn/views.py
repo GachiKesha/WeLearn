@@ -13,7 +13,7 @@ from .serializers import UserSerializer
 
 @api_view(['POST'])
 def login(request):
-    user = get_object_or_404(User, email=request.data['username'])
+    user = get_object_or_404(User, email=request.data['email'])
     if not user.check_password(request.data['password']):
         return Response({"Unable to find email and password"}, status=status.HTTP_401_UNAUTHORIZED)
     token, created = Token.objects.get_or_create(user=user)
@@ -32,7 +32,7 @@ def signup(request):
         user = serializer.save()
         token = Token.objects.create(user=user)
         return Response({"token": token.key, "user": serializer.data})
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response(serializer.errors, status=400)
 
 
 @api_view(['POST'])
@@ -41,6 +41,7 @@ def signup(request):
 def peer(request):
     result = PeerService.find_or_queue_peer(request)
     if result:
+        print(result)
         return Response(result[0], status=result[1])
     else:
         return Response("Something went wrong", status=500)
@@ -48,19 +49,12 @@ def peer(request):
 
 @api_view(['POST'])
 def ping_peer(request, peer_id):
-    if request.data.get('delete'):
-        result = PeerService.delete_peer(peer_id)
-        if result:
-            return Response(result[0], status=result[1])
-        else:
-            return Response("Something went wrong", status=500)
-
+    result = PeerService.delete_peer(peer_id) if request.data.get('delete') \
+        else PeerService.ping_peer(peer_id)
+    if result:
+        return Response(result[0], status=result[1])
     else:
-        result = PeerService.ping_peer(peer_id)
-        if result:
-            return Response(result[0], status=result[1])
-        else:
-            return Response("Something went wrong", status=500)
+        return Response("Something went wrong", status=500)
 
 
 @api_view(['GET'])

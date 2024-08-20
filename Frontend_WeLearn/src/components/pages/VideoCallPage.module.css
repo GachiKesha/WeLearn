@@ -93,3 +93,10 @@
   height: 60px;
   margin: 13px;
 }
+
+.box .icon-container .user-name {
+  border-radius: 10px;
+  margin-right: 5px;
+  margin-left: 5px;
+  color: #fff;
+}

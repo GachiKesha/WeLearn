@@ -25,8 +25,7 @@ SECRET_KEY = 'django-insecure-se3t3_b%=cu*eu$2c2bl3j7r!ka_m(gdcgkht*eq7u6jyr#)gt
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '26.211.201.103']
 
 # Application definition
 
@@ -82,6 +81,11 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    },
+    'postgre': {
+        "NAME": "user_data",
+        "ENGINE": "django.db.backends.mysql",
+        "USER": "welearn_admin",
     }
 }
 
@@ -129,5 +133,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    "http://127.0.0.1:3000"  
+    "http://127.0.0.1:3000",
+    "http://26.211.201.103:3000"  
 ]

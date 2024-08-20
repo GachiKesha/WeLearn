@@ -15,6 +15,7 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const validateFields = () => {
     let isValid = true;
@@ -45,13 +46,13 @@ function LoginPage() {
     }
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/login/", {
+      const response = await fetch(`${backendUrl}/login/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          username: email,
+          email: email,
           password: password,
         }),
       });

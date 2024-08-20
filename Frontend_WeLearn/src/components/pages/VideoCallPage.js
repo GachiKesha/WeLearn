@@ -18,19 +18,23 @@ function VideoCallPage() {
   const [CameraOff, setCameraOff] = useState(true);
   const [isUserActive, setIsUserActive] = useState(false);
 
-  const [oppUsername, setOppUsername] = useState("");
+  const [oppUsername, setTargetUsername] = useState("");
 
-  let [peerId, setPeerId] = useState(null);
-  let [targetPeerId, setTargetPeerId] = useState("");
-  let previous = null;
+  const [peerId, setPeerId] = useState(null);
+  const [targetPeerId, setTargetPeerId] = useState("");
+  const [isConnected, setIsConnected] = useState(false);
+  const previousRef = useRef("");
 
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
-  const peerRef = useRef(null);
+  const peer = useRef(null);
+
+  const firstRender = useRef(true);
 
   const knownLanguage = sessionStorage.getItem("knownLanguage");
   const desiredLanguage = sessionStorage.getItem("desiredLanguage");
   const username = sessionStorage.getItem("username");
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const toggleMicrophone = () => {
     if (localVideoRef.current) {
@@ -55,132 +59,162 @@ function VideoCallPage() {
   };
 
   const handleIncomingCall = (call) => {
-    console.log("Someone found us!");
     call.answer(localVideoRef.current.srcObject);
-    call.on("stream", (remoteStream) => {
+    call.on('stream', (remoteStream) => {
+      setIsConnected(true);
       remoteVideoRef.current.srcObject = remoteStream;
     });
-    call.on("close", () => {
+    call.on('close', () => {
       if (remoteVideoRef.current) {
-        remoteVideoRef.current.remove();
-        remoteVideoRef.current = null;
+        remoteVideoRef.current.srcObject = null;
       }
+      setIsConnected(false);
+      setTargetUsername(null);
     });
+    peer.current.on('connection', (conn) => {
+      conn.on('data', (data) => {
+        if(data === 'ping') {
+          console.log('pong');
+          return;
+        }  
+        setTargetUsername(data);
+      });
+
+      conn.on('close', handlePeerDisconnect);
+    });    
+  };
+
+  const handlePeerDisconnect = () => {
+    console.log('Peer disconnected');
+    setIsConnected(false);
+    setTargetUsername(null);
+    if (remoteVideoRef.current) {
+      remoteVideoRef.current.srcObject = null;
+    }
   };
 
   const callPeer = () => {
     if (!targetPeerId) {
-      console.log("Please, enter valid target peer id.");
+      console.warn('No target peer id.');
+      return;
     }
-    let call = peerRef.current.call(
-      targetPeerId,
-      localVideoRef.current.srcObject
-    );
-    call.on("stream", function (remoteStream) {
-      remoteVideoRef.current.srcObject = remoteStream;
+
+    const localStream = localVideoRef.current.srcObject;
+    if (!localStream) {
+      console.warn('Local stream is not available');
+      return;
+    }
+
+    const call = peer.current.call(targetPeerId, localStream);
+    const conn = peer.current.connect(targetPeerId);
+
+    conn.on('open', () => {      
+      conn.send(username);
     });
-    call.on("close", () => {
-      if (remoteVideoRef.current) {
-        remoteVideoRef.current.remove();
-        remoteVideoRef.current = null;
+
+    conn.on('data', (data) => {
+      if (data === 'ping') {
+        console.log('pong');
       }
+    })
+
+    call.on('stream', (remoteStream) => {
+      remoteVideoRef.current.srcObject = remoteStream;
+      setIsConnected(true);
+    });
+
+    call.on('close', () => {
+      if (remoteVideoRef.current !== null) {
+        remoteVideoRef.current.srcObject = null;
+      }
+      setIsConnected(false);
+      setTargetUsername(null);
     });
   };
 
   const initializePeer = async () => {
-    const localStream = await navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: true,
-    });
-    localVideoRef.current.srcObject = localStream;
-    peerRef.current = new Peer();
-    const token = sessionStorage.getItem("token");
-    peerRef.current.on("open", async (id) => {
-      setPeerId(id);
-      try {
-        const response = await fetch("http://localhost:8000/peer/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Token ${token}`,
-          },
-          body: JSON.stringify({
-            peer_id: id,
-            previous: previous,
-          }),
-        });
-        previous = id;
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const responseData = await response.json();
-        if (response.status === 200) {
-          console.log(responseData.peer_id);
-          setTargetPeerId(responseData.peer_id);
-          setOppUsername(responseData.username);
-          setIsUserActive(true);
-        }
-        if (response.status === 201) {
-          peerRef.current.on("call", handleIncomingCall);
-          setIsUserActive(true);
-        } 
-      } catch (error) {
-        console.error("Data sending error:", error);
-      }
-    });
-  };
-
-  const fetchInactiveUser = async (_delete) => {
     try {
-      await fetch(`http://localhost:8000/ping_peer/${peerRef.current?.id}/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Token ${sessionStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({
-          delete: _delete,
-        }),
-      });
-    } catch (error) {
-      console.error("Error sending PeerID to backend:", error);
-    }
-  };
-
-  useEffect(() => {
-    const checkActivity = setInterval(() => {
-      if (isUserActive) {
-        fetchInactiveUser(false);
+      if (peer.current) {
+        peer.current.destroy();
       }
-    }, 6000);
 
-    const handleBeforeUnload = () => {
-      console.log("1-");
-      //fetchInactiveUser(true);
-      console.log("1--");
-      //clearInterval(checkActivity);
-      console.log("1---");
-      //setIsUserActive(false);
-      console.log("1----");
+      const localStream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true,
+      });
+      localVideoRef.current.srcObject = localStream;
+
+      peer.current = new Peer();
+      const token = sessionStorage.getItem('token');
+      if (!token) {
+        console.error('Token is missing');
+        return;
+      }
+
+      peer.current.on('open', async (id) => {
+        setPeerId(id);
+        try {
+          const response = await fetch(`${backendUrl}/peer/`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Token ${token}`,
+            },
+            body: JSON.stringify({
+              peer_id: id,
+              previous: peerId,
+            }),
+          });
+          
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const responseData = await response.json();
+          if (response.status === 200) {
+            setTargetPeerId(responseData.peer_id);
+            setTargetUsername(responseData.username);    
+          }
+          else if (response.status === 201) {
+            peer.current.on('call', handleIncomingCall);
+          } 
+          setIsUserActive(true);
+        } catch (error) {
+          console.error('Peer setup error:', error);
+        }
+        previousRef.current = id;
+      });
+      
+      peer.current.on('error', (err) => {
+        console.error('Peer error:', err);
+      });
+      
+      peer.current.on('disconnected', () => {
+        console.log('Peer disconnected');
+        setIsUserActive(false);        
+        Object.values(peer.current.connections).forEach(connectionArray => {
+          connectionArray.forEach(connection => {
+            console.warn('connection:', connection);
+            connection.close();
+          })
+        })
+        peer.current.destroy();
+      })
+    } catch (error) {
+      console.error('Error initializing peer:', error);
     };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    window.addEventListener("unload", handleBeforeUnload);
-
-    return () => {
-      clearInterval(checkActivity);
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-      window.removeEventListener("unload", handleBeforeUnload);
-      fetchInactiveUser(true);
-    };
-  }, [isUserActive]);
+  };  
 
   useEffect(() => {
-    initializePeer();
+    if (firstRender.current) { // StrictMode crutch 
+      firstRender.current = false;
+      return;
+    }
+    initializePeer().then(() => console.warn('peer initialized.'));
+    
     return () => {
-      if (peerRef.current) {
-        peerRef.current.destroy(); // Закриває підключення Peer при виході
-        peerRef.current = null;
+      fetchInactiveUser(true);
+      if (peer.current) {      
+        peer.current.destroy();
       }
 
       if (localVideoRef.current) {
@@ -199,19 +233,84 @@ function VideoCallPage() {
   }, []);
 
   useEffect(() => {
+    if (firstRender.current) { // StrictMode crutch 
+      firstRender.current = false;
+      return;
+    }
     if (targetPeerId) {
-      console.log("sucecs");
       callPeer();
     }
+    else {
+      console.warn('No target peer id');
+    }
   }, [targetPeerId]);
+  
+  const fetchInactiveUser = async (_delete) => {
+    if (!peer.current || !peer.current.id) {
+      console.warn('Peer ID is not available');
+      return;
+    }
+    try {
+      const response = await fetch(`${backendUrl}/ping_peer/${peer.current?.id}/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${sessionStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          delete: _delete
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      if (response.status === 200) {
+        const responseData = await response.json();
+        console.log('in call:', responseData.target_peer_id != null);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (firstRender.current) { // StrictMode crutch 
+      firstRender.current = false;
+      return;
+    }
+
+    const checkActivity = setInterval(() => {
+      if (isUserActive) {
+        fetchInactiveUser(false);
+        Object.values(peer.current.connections).forEach(connectionArray => {
+          connectionArray.forEach(connection => {
+            if (connection.open && typeof connection.send === 'function') {
+              connection.send('ping');
+              console.log('ping');
+            }
+          });
+        });        
+      }
+      else {
+        console.warn('No interval for innactive user');
+      }
+    }, 6000);      
+ 
+    return () => {
+      clearInterval(checkActivity);
+    };
+  }, [isUserActive]);
 
   return (
     <div>
       <Header />
-      <div className="icon-container">
-        і
-        <img className="icon" src={iconImage} alt="Icon" />
-      </div>
+        <div className="icon-container">
+          <div className="user-name">
+            <p>{username}</p>
+          </div>
+          <img className="icon" src={iconImage} alt="Icon" />
+        </div>
+      
       <div className={styles.mainContainer}>
         <div className={styles.videosSection}>
           <video
@@ -231,16 +330,13 @@ function VideoCallPage() {
             autoPlay
             playsInline
           />
-        </div>
-        {/*  <div>Known Language: {knownLanguage}</div>
-            <div>Desired Language: {desiredLanguage}</div> */}
-
+        </div>        
         <div className={styles.controlsSection}>
           <div>
             <div>Username: {username}</div>
+            {isConnected && oppUsername && <div>Stranger: {oppUsername}</div>}
             <div>Known Language: {knownLanguage}</div>
             <div>Desired Language: {desiredLanguage}</div>
-            {oppUsername && <div>Opponent: {oppUsername}</div>}
           </div>
         </div>
       </div>

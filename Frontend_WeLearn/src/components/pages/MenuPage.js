@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
-import Peer from "peerjs";
+import React, { useEffect, useRef } from "react";
 import Header from "../common/Header";
 import AnimatedFooter from "../common/AnimatedFooter";
 import Support from "../common/Support";
+import Settings from "../common/Settings";
 import "./style.css";
 import "./menu.css";
 import { useNavigate } from "react-router-dom";
@@ -14,21 +14,14 @@ import logout from "./logout.png";
 function MenuPage() {
   const navigate = useNavigate();
   const localVideoRef = useRef();
-  const peerRef = useRef();
-  const [peerId, setPeerId] = useState(null);
-  const [username, setUsername] = useState(sessionStorage.getItem("username")); // Replace 'John Doe' with your default username
+  const username = sessionStorage.getItem("username"); 
 
   const onStart = () => {
-    console.log("Start button clicked");
-    // redirect to /videocallPage
     navigate("/videocall");
   };
 
   const onLogout = (e) => {
     e.preventDefault();
-    console.log("Logout link clicked");
-    console.log("Logout button clicked");
-    // redirect to /loginPage
     sessionStorage.removeItem("username");
     sessionStorage.removeItem("desiredLanguage");
     sessionStorage.removeItem("knownLanguage");
@@ -37,41 +30,29 @@ function MenuPage() {
     navigate("/");
   };
 
-  const initializePeer = async () => {
+  const getVideo = async () => {
     try {
       const localStream = await navigator.mediaDevices.getUserMedia({
         video: true,
         audio: true,
       });
+      localVideoRef.current.srcObject = localStream;
 
-      if (localVideoRef.current) {
-        localVideoRef.current.srcObject = localStream;
-      }
-
-      peerRef.current = new Peer();
-
-      peerRef.current.on("open", (id) => {
-        setPeerId(id);
-      });
-
-      peerRef.current.on("call", handleIncomingCall);
-      // Connect to signaling server or perform other setup if needed
     } catch (error) {
       console.error("Error accessing media devices:", error);
     }
   };
-
+  
   useEffect(() => {
-    initializePeer();
+    getVideo();
 
     return () => {
-      // Additional cleanup or resource release if needed
+      if (localVideoRef.current && localVideoRef.current.srcObject) {
+        const tracks = localVideoRef.current.srcObject.getTracks();
+        tracks.forEach(track => track.stop());
+      }
     };
   }, []);
-
-  const handleIncomingCall = (call) => {
-    // Handle incoming call if needed
-  };
 
   return (
     <div>
@@ -106,6 +87,7 @@ function MenuPage() {
         className="videoElement"
       />
       <Support />
+      <Settings />
       <div className="footer-container">
         <AnimatedFooter />
         <div className="image-container">
