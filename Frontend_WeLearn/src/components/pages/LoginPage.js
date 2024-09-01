@@ -15,6 +15,7 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [loading, setLoading] = useState(false);
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const validateFields = () => {
@@ -39,13 +40,16 @@ function LoginPage() {
     return isValid;
   };
 
-  const onSubmit = async () => {
+  const onSubmit = async (e) => {
+    e.preventDefault();
     const isValid = validateFields();
     if (!isValid) {
       return;
     }
 
     try {
+      setLoading(true);
+
       const response = await fetch(`${backendUrl}/login/`, {
         method: "POST",
         headers: {
@@ -55,39 +59,24 @@ function LoginPage() {
           email: email,
           password: password,
         }),
-      });
+      });      
 
       if (response.ok) {
         const data = await response.json();
+        const {
+          user: {
+            username,
+            languages: { known_language, desired_language },
+          },
+        } = data;
         sessionStorage.setItem("isAuthenticated", true);
-        console.log("Login successful!");
-
         sessionStorage.setItem("token", data.token);
-        const token = sessionStorage.getItem("token");
-        if (token) {
-          console.log("Token:", token);
-        } else {
-          console.log("Token not found");
-        }
+        sessionStorage.setItem("username", username);
+        sessionStorage.setItem("knownLanguage", known_language);
+        sessionStorage.setItem("desiredLanguage", desired_language);        
 
-        sessionStorage.setItem("username", data.user.username);
-        sessionStorage.setItem(
-          "knownLanguage",
-          data.user.languages.known_language
-        );
-        sessionStorage.setItem(
-          "desiredLanguage",
-          data.user.languages.desired_language
-        );
-        const username = sessionStorage.getItem("username");
-        const knownLanguage = sessionStorage.getItem("knownLanguage");
-        const desiredLanguage = sessionStorage.getItem("desiredLanguage");
-        console.log("Username:", username);
-        console.log("Known Language:", knownLanguage);
-        console.log("Desired Language:", desiredLanguage);
-
-        console.log("Navigating to /menu");
         navigate("/menu");
+
       } else {
         const errorData = await response.json();
         console.error("Login failed.", errorData);
@@ -95,6 +84,8 @@ function LoginPage() {
       }
     } catch (error) {
       console.error("Login error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -133,7 +124,7 @@ function LoginPage() {
             </label>
             <div className="link">
               <button type="button" onClick={onSubmit} className="login">
-                Login
+                {loading ? "loading...": "Login"}
               </button>
               <p>
                 Not Registered Yet?{" "}

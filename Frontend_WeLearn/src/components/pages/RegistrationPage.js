@@ -20,6 +20,7 @@ function RegistrationPage() {
   const [repeatPasswordError, setRepeatPasswordError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [languageError, setLanguageError] = useState("");
+  const [loading, setLoading] = useState(false);
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const validateForm = () => {
@@ -119,6 +120,7 @@ function RegistrationPage() {
   const handleSubmit = async () => {
     if (validateForm()) {
       try {
+        setLoading(true);
         const response = await fetch(`${backendUrl}/signup/`, {
           method: "POST",
           headers: {
@@ -135,33 +137,20 @@ function RegistrationPage() {
           }),
         });
 
-        if (response.ok) {
-          const data = await response.json();
-          console.log("Registration successful!");
+        if (response.ok) {          
+          const {
+            user: {
+              username,
+              languages: { known_language, desired_language },
+            },
+            token,
+          } = await response.json();
+          
           sessionStorage.setItem("isAuthenticated", true);
-
-          sessionStorage.setItem("token", data.token);
-          const token = sessionStorage.getItem("token");
-          if (token) {
-            console.log("Token:", token);
-          } else {
-            console.log("Token not found");
-          }
-          sessionStorage.setItem("username", data.user.username);
-          sessionStorage.setItem(
-            "knownLanguage",
-            data.user.languages.known_language
-          );
-          sessionStorage.setItem(
-            "desiredLanguage",
-            data.user.languages.desired_language
-          );
-          const username = sessionStorage.getItem("username");
-          const knownLanguage = sessionStorage.getItem("knownLanguage");
-          const desiredLanguage = sessionStorage.getItem("desiredLanguage");
-          console.log("Username:", username);
-          console.log("Known Language:", knownLanguage);
-          console.log("Desired Language:", desiredLanguage);
+          sessionStorage.setItem("token", token);
+          sessionStorage.setItem("username", username);
+          sessionStorage.setItem("knownLanguage", known_language);
+          sessionStorage.setItem("desiredLanguage", desired_language);          
 
           navigate("/menu");
         } else {
@@ -170,12 +159,19 @@ function RegistrationPage() {
             "Registration failed. Please check the form for errors.",
             errorData
           );
+          if (errorData.username) {
+            setNameError(errorData.username);
+          } else if (errorData.email) {
+            setEmailError(errorData.email);
+          }
         }
       } catch (error) {
         console.error(
           "An error occurred while processing the registration.",
           error
         );
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -253,7 +249,7 @@ function RegistrationPage() {
 
             <div className="link1">
               <button type="submit" className="confirm" onClick={handleSubmit}>
-                Confirm
+                {loading ? "loading...": "Confirm"}
               </button>
             </div>
           </div>

@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-se3t3_b%=cu*eu$2c2bl3j7r!ka_m(gdcgkht*eq7u6jyr#)gt
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '26.211.201.103']
+ALLOWED_HOSTS = ['*', '192.168.1.X']
 
 # Application definition
 
@@ -81,11 +81,6 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-    },
-    'postgre': {
-        "NAME": "user_data",
-        "ENGINE": "django.db.backends.mysql",
-        "USER": "welearn_admin",
     }
 }
 
