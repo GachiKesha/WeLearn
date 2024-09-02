@@ -1,7 +1,12 @@
+import settingLogo from './settingLogo.png'
+import styles from './setting.css'
+
 function Settings(){
     return (
-        <div className="support-link">
-             <a href="#" className="settings">Settings</a>
+        <div className="settings-link">
+             <a href="#" className="settings">
+                <img src={settingLogo} alt="Setting Logo" />
+             </a>
         </div>
     )
 }

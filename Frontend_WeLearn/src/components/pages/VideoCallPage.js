@@ -12,6 +12,7 @@ import microOn from "./microOn.png";
 import microOff from "./microOff.png";
 import user1Image from "./user1.png";
 import user2Image from "./user2.png";
+import { useNavigate } from "react-router-dom";
 
 function VideoCallPage() {
   const [MuteMicrophone, setMuteMicrophone] = useState(false);
@@ -23,18 +24,15 @@ function VideoCallPage() {
   const [peerId, setPeerId] = useState(null);
   const [targetPeerId, setTargetPeerId] = useState("");
   const [isConnected, setIsConnected] = useState(false);
-  const previousRef = useRef("");
 
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
   const peer = useRef(null);
-
-  const firstRender = useRef(true);
-
   const knownLanguage = sessionStorage.getItem("knownLanguage");
   const desiredLanguage = sessionStorage.getItem("desiredLanguage");
   const username = sessionStorage.getItem("username");
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
+  const navigate = useNavigate();
 
   const toggleMicrophone = () => {
     if (localVideoRef.current) {
@@ -60,32 +58,32 @@ function VideoCallPage() {
 
   const handleIncomingCall = (call) => {
     call.answer(localVideoRef.current.srcObject);
-    call.on('stream', (remoteStream) => {
+    call.on("stream", (remoteStream) => {
       setIsConnected(true);
       remoteVideoRef.current.srcObject = remoteStream;
     });
-    call.on('close', () => {
+    call.on("close", () => {
       if (remoteVideoRef.current) {
         remoteVideoRef.current.srcObject = null;
       }
       setIsConnected(false);
       setTargetUsername(null);
     });
-    peer.current.on('connection', (conn) => {
-      conn.on('data', (data) => {
-        if(data === 'ping') {
-          console.log('pong');
+    peer.current.on("connection", (conn) => {
+      conn.on("data", (data) => {
+        if (data === "ping") {
+          console.log("pong");
           return;
-        }  
+        }
         setTargetUsername(data);
       });
 
-      conn.on('close', handlePeerDisconnect);
-    });    
+      conn.on("close", handlePeerDisconnect);
+    });
   };
 
   const handlePeerDisconnect = () => {
-    console.log('Peer disconnected');
+    console.log("Peer disconnected");
     setIsConnected(false);
     setTargetUsername(null);
     if (remoteVideoRef.current) {
@@ -95,35 +93,35 @@ function VideoCallPage() {
 
   const callPeer = () => {
     if (!targetPeerId) {
-      console.warn('No target peer id.');
+      console.warn("No target peer id.");
       return;
     }
 
     const localStream = localVideoRef.current.srcObject;
     if (!localStream) {
-      console.warn('Local stream is not available');
+      console.warn("Local stream is not available");
       return;
     }
 
     const call = peer.current.call(targetPeerId, localStream);
     const conn = peer.current.connect(targetPeerId);
 
-    conn.on('open', () => {      
+    conn.on("open", () => {
       conn.send(username);
     });
 
-    conn.on('data', (data) => {
-      if (data === 'ping') {
-        console.log('pong');
+    conn.on("data", (data) => {
+      if (data === "ping") {
+        console.log("pong");
       }
-    })
+    });
 
-    call.on('stream', (remoteStream) => {
+    call.on("stream", (remoteStream) => {
       remoteVideoRef.current.srcObject = remoteStream;
       setIsConnected(true);
     });
 
-    call.on('close', () => {
+    call.on("close", () => {
       if (remoteVideoRef.current !== null) {
         remoteVideoRef.current.srcObject = null;
       }
@@ -133,6 +131,12 @@ function VideoCallPage() {
   };
 
   const initializePeer = async () => {
+    const token = sessionStorage.getItem('token');
+    if (!token) {
+      console.error("Token is missing");
+      return;
+    }
+
     try {
       if (peer.current) {
         peer.current.destroy();
@@ -145,13 +149,7 @@ function VideoCallPage() {
       localVideoRef.current.srcObject = localStream;
 
       peer.current = new Peer();
-      const token = sessionStorage.getItem('token');
-      if (!token) {
-        console.error('Token is missing');
-        return;
-      }
-
-      peer.current.on('open', async (id) => {
+      peer.current.on("open", async (id) => {
         setPeerId(id);
         try {
           const response = await fetch(`${backendUrl}/peer/`, {
@@ -162,58 +160,58 @@ function VideoCallPage() {
             },
             body: JSON.stringify({
               peer_id: id,
-              previous: peerId,
             }),
           });
-          
+
           if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            if (response.status === 403) {
+              alert("You are unauthorized. Redirecting to login");
+              navigate("/");
+            } else {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
           }
           const responseData = await response.json();
           if (response.status === 200) {
             setTargetPeerId(responseData.peer_id);
-            setTargetUsername(responseData.username);    
+            setTargetUsername(responseData.username);
           }
-          else if (response.status === 201) {
-            peer.current.on('call', handleIncomingCall);
-          } 
+          if (response.status === 201) {
+            peer.current.on("call", handleIncomingCall);
+          }
           setIsUserActive(true);
         } catch (error) {
-          console.error('Peer setup error:', error);
+          console.error(error);
         }
-        previousRef.current = id;
       });
-      
-      peer.current.on('error', (err) => {
-        console.error('Peer error:', err);
+
+      peer.current.on("error", (err) => {
+        console.error("Peer error:", err);
       });
-      
-      peer.current.on('disconnected', () => {
-        console.log('Peer disconnected');
-        setIsUserActive(false);        
-        Object.values(peer.current.connections).forEach(connectionArray => {
-          connectionArray.forEach(connection => {
-            console.warn('connection:', connection);
+
+      peer.current.on("disconnected", () => {
+        console.log("Peer disconnected");
+        fetchInactiveUser(true);
+        setIsUserActive(false);
+        Object.values(peer.current.connections).forEach((connectionArray) => {
+          connectionArray.forEach((connection) => {
+            console.warn("connection:", connection);
             connection.close();
-          })
-        })
+          });
+        });
         peer.current.destroy();
-      })
+      });
     } catch (error) {
-      console.error('Error initializing peer:', error);
-    };
-  };  
+      console.error("Error initializing peer:", error);
+    }
+  };
 
   useEffect(() => {
-    if (firstRender.current) { // StrictMode crutch 
-      firstRender.current = false;
-      return;
-    }
-    initializePeer().then(() => console.warn('peer initialized.'));
-    
+    initializePeer().then(() => console.warn("peer initialized."));
+
     return () => {
       fetchInactiveUser(true);
-      if (peer.current) {      
+      if (peer.current) {
         peer.current.destroy();
       }
 
@@ -233,40 +231,38 @@ function VideoCallPage() {
   }, []);
 
   useEffect(() => {
-    if (firstRender.current) { // StrictMode crutch 
-      firstRender.current = false;
-      return;
-    }
     if (targetPeerId) {
       callPeer();
-    }
-    else {
-      console.warn('No target peer id');
+    } else {
+      console.warn("No target peer id");
     }
   }, [targetPeerId]);
-  
+
   const fetchInactiveUser = async (_delete) => {
     if (!peer.current || !peer.current.id) {
-      console.warn('Peer ID is not available');
+      console.warn("Peer ID is not available");
       return;
     }
     try {
-      const response = await fetch(`${backendUrl}/ping_peer/${peer.current?.id}/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Token ${sessionStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({
-          delete: _delete
-        }),
-      });
+      const response = await fetch(
+        `${backendUrl}/ping_peer/${peer.current?.id}/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Token ${sessionStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({
+            delete: _delete,
+          }),
+        }
+      );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       if (response.status === 200) {
         const responseData = await response.json();
-        console.log('in call:', responseData.target_peer_id != null);
+        console.log("in call:", responseData.target_peer_id != null);
       }
     } catch (error) {
       console.error(error);
@@ -274,28 +270,22 @@ function VideoCallPage() {
   };
 
   useEffect(() => {
-    if (firstRender.current) { // StrictMode crutch 
-      firstRender.current = false;
-      return;
-    }
-
     const checkActivity = setInterval(() => {
       if (isUserActive) {
         fetchInactiveUser(false);
-        Object.values(peer.current.connections).forEach(connectionArray => {
-          connectionArray.forEach(connection => {
-            if (connection.open && typeof connection.send === 'function') {
-              connection.send('ping');
-              console.log('ping');
+        Object.values(peer.current.connections).forEach((connectionArray) => {
+          connectionArray.forEach((connection) => {
+            if (connection.open && typeof connection.send === "function") {
+              connection.send("ping");
+              console.log("ping");
             }
           });
-        });        
+        });
+      } else {
+        console.warn("No interval for innactive user");
       }
-      else {
-        console.warn('No interval for innactive user');
-      }
-    }, 6000);      
- 
+    }, 6000);
+
     return () => {
       clearInterval(checkActivity);
     };
@@ -304,13 +294,13 @@ function VideoCallPage() {
   return (
     <div>
       <Header />
-        <div className="icon-container">
-          <div className="user-name">
-            <p>{username}</p>
-          </div>
-          <img className="icon" src={iconImage} alt="Icon" />
+      <div className="icon-container">
+        <div className="user-name">
+          <p>{username}</p>
         </div>
-      
+        <img className="icon" src={iconImage} alt="Icon" />
+      </div>
+
       <div className={styles.mainContainer}>
         <div className={styles.videosSection}>
           <video
@@ -330,7 +320,7 @@ function VideoCallPage() {
             autoPlay
             playsInline
           />
-        </div>        
+        </div>
         <div className={styles.controlsSection}>
           <div>
             <div>Username: {username}</div>

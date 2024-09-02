@@ -1,0 +1,21 @@
+.settings-link {
+    position: fixed;
+    bottom: 200px;
+    left: 20px;
+}
+  
+.settings-link a {
+    display: block;
+}
+  
+.settings-link img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    transition: transform 0.5s linear;
+    transition-timing-function: cubic-bezier(0.5, 0, 0.25, 1);
+}
+  
+.settings-link img:hover {
+    transform: rotate(170deg);
+}
